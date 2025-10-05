@@ -177,7 +177,7 @@ function layoutSplash() {
         tagFontSize = (w + h) / 1600;
         randomFontSize = itemFontSizeUnderline * 2;
         borderWidth = getRemInPx() * w / 7000;
-        banner.innerHTML = 'NIKLAS&nbsp;ROY';
+        banner.innerHTML = 'TAJ&nbsp;WEIRd';
 
     } else { // portrait-ish
 
@@ -189,7 +189,7 @@ function layoutSplash() {
         tagFontSize = w / 300;
         randomFontSize = itemFontSizeUnderline * .9;
         borderWidth = getRemInPx() * w / 2000;
-        banner.innerHTML = 'NIKLAS<br>ROY';
+        banner.innerHTML = 'TAJ<br>WEIRd';
     }
 
 
@@ -401,7 +401,7 @@ function layoutGrid() {
     }
 
     // add "random project" message element after the grid
-    randomMessage.innerHTML = `Found nothing exciting to&nbsp;click&nbsp;on!? I&nbsp;could&nbsp;take&nbsp;you to&nbsp;a&nbsp;<a href='https://www.niklasroy.com/random/'>random</a>&nbsp;project!`;
+    randomMessage.innerHTML = `Found nothing exciting to&nbsp;click&nbsp;on!? I&nbsp;could&nbsp;take&nbsp;you to&nbsp;a&nbsp;<a href='https://www.tajweird.com/random/'>random</a>&nbsp;project!`;
     randomMessage.style.fontSize = `${randomFontSize}rem`;
     randomMessage.style.lineHeight = `${randomFontSize * 1.3}rem`;
     randomMessage.style.padding = `0 5vw`;
@@ -775,7 +775,7 @@ function renderTagBar() {
 
         // Base styles
         btn.style.cssText = `
-        background: #0af;
+        background: rgba(40, 8, 32, 1);
         color: white;
         font-family: futuraMR;
         font-size: ${tagFontSize}rem;
@@ -791,11 +791,11 @@ function renderTagBar() {
         const updateStyles = () => {
             const isSelectedNow = selectedTag === tagValue;
             if (isSelectedNow) {
-                btn.style.background = '#fff';
-                btn.style.color = '#0af';
+                btn.style.background = '#0c411aff';
+                btn.style.color = 'rgba(52, 55, 9, 1)';
             } else {
-                btn.style.background = '#0af';
-                btn.style.color = '#fff';
+                btn.style.background = 'rgba(48, 32, 32, 1)';
+                btn.style.color = '#6ef650ff';
             }
         };
 

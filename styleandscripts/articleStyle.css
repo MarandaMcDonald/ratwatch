@@ -1,0 +1,89 @@
+  @font-face {
+    font-family: futuraM;
+    src: url('webfonts/futura-medium-webfont.woff2') format('woff2'),
+      url('webfonts/futura-medium-webfont.woff') format('woff');
+  }
+
+  .futura-font {
+    font-family: futuraM, sans-serif;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Georgia, Times, serif;
+    /*  text-size-adjust: none;*/
+    background: #ccc;
+    color: #333; 
+     opacity: 0;
+    transition: opacity .3s ease-in-out; 
+  }
+
+ body.is-loaded {
+  opacity: 1;
+}
+
+  html {
+    /* base font size */
+    font-size: 20px;
+  }
+
+  /* Default link (unvisited) */
+  a {
+    color: #333;
+    padding: 0 2px 0 2px;
+  }
+
+  /* Visited link */
+  a:visited {
+    color: #333;
+  }
+
+  /* Link on hover */
+  a:hover {
+    color: #000;
+    background: #ddd;
+  }
+
+  /* Link while active (when clicked) */
+  a:active {
+    color: #777;
+  }
+
+  #random-button {
+    display: none;
+  }
+
+  #menu-wrapper {
+    opacity: 0;
+  }
+
+ 
+.video, .image, .poster-image, .video-container { /* embedded media elements to be faded in once loaded - add future classes here */
+    opacity: 0;
+    transition: opacity .3s ease-in-out; 
+}
+ 
+.is-loaded { /* fade in media elements */
+  opacity: 1;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse; /* merge borders into a single line */
+}
+
+th, td {
+  padding: 0.5rem;
+  border: 1px solid #555;
+  font-weight: normal;
+  text-align:left;
+}
+
+.center {
+  text-align: center;
+}
+
+strong { 
+  font-weight: 600; 
+}
