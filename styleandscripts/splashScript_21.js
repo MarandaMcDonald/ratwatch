@@ -4,6 +4,7 @@ TODO:
 During scroll back up: mobile ff sometimes does not show splash screen again
 Keep random fixed y-pos but behind tiles
 Check categories in content array
+make images more responsive to load, https://johnfraney.ca/tools/responsive-image-generator/
 
 FIXED:
 video fade to grey jumps on mobile ff / also causes problems on mobile chrome
@@ -24,7 +25,7 @@ let numberOfElements = 0; //number of elements in content array (zero-based; thu
 let w, h, ratio;              // width and height of viewport - will be calculated when loaded & resized; w/h ratio
 let cellSize = 1;       //size of a cell in pixel, incl space on the right side and on bottom
 let maxRow = 0;         //stores the number of the lowest row that's filled with content
-let colors = ["Orange", "BlueViolet", "DeepPink", "DarkTurquoise", "Fuchsia", "Gold", "HotPink", "MediumBlue", "OrangeRed", "DodgerBlue", "MediumVioletRed", "LimeGreen"];
+let colors = ["DarkRed","MediumVioletRed","OrangeRed","Gold","RebeccaPurple","DarkMagenta","DarkSlateBlue","SeaGreen","DarkGreen","DarkOliveGreen","Teal","SteelBlue","Navy","SaddleBrown","Maroon","SlateGrey","Black","DimGrey"];
 let xPosition = [0];    //stores positions of each menu element (top left corner)
 let yPosition = [0];    //standard y-position for menu item
 let imgW = [0];         //stores original pixel-width and -height of image in item
@@ -772,12 +773,12 @@ function renderTagBar() {
         const btn = document.createElement('button');
         btn.textContent = label;
         btn.classList.add("tagButton");
-
+ 
         // Base styles
         btn.style.cssText = `
-        background: rgba(40, 8, 32, 1);
+        background: rgba(96, 29, 79, 1);
         color: white;
-        font-family: futuraMR;
+        font-family: 'Courier New', monospace; 
         font-size: ${tagFontSize}rem;
         letter-spacing: ${tagFontSize * 0.1}rem;
         text-transform: uppercase;
@@ -791,11 +792,11 @@ function renderTagBar() {
         const updateStyles = () => {
             const isSelectedNow = selectedTag === tagValue;
             if (isSelectedNow) {
-                btn.style.background = '#0c411aff';
-                btn.style.color = 'rgba(52, 55, 9, 1)';
+                btn.style.background = '#125f00ff';
+                btn.style.color = 'rgba(71, 6, 57, 1)';
             } else {
-                btn.style.background = 'rgba(48, 32, 32, 1)';
-                btn.style.color = '#6ef650ff';
+                btn.style.background = 'rgba(71, 6, 57, 1)';
+                btn.style.color = '#125f00ff';
             }
         };
 
@@ -939,7 +940,7 @@ function drawRect(format, index) { //draws a single menu item and appends it to 
     left: ${borderWidth * 2}px; top: ${borderWidth * 2}px; overflow:hidden; text-align: left;">
       
     <span style="white-space: pre-wrap; hyphens:auto; word-break: break-word; overflow-wrap: break-word; background:${colors[(index + hash(selectedTag)) % colors.length]}; 
-      padding:${borderWidth}px; -webkit-box-decoration-break: clone;box-decoration-break: clone;font-family: Georgia, Times, serif;font-size: ${itemFontSize}rem; 
+      padding:${borderWidth}px; -webkit-box-decoration-break: clone;box-decoration-break: clone;font-family: 'Courier New', monospace;font-size: ${itemFontSize}rem; 
       line-height:  ${itemFontSize * 1.5}rem; font-style: italic; text-align: left; text-shadow: 2px 2px 8px rgba(0,0,0,.2);
       box-shadow: 4px 4px 8px rgba(0,0,0,.2);">${visibleContent[index].title}</span>
 
@@ -948,7 +949,7 @@ function drawRect(format, index) { //draws a single menu item and appends it to 
       <div style="height:6px;display:block;"></div>
       <span style="white-space: pre-wrap; hyphens:auto; word-break: break-word; overflow-wrap: 
       break-word;background:${colors[(index + hash(selectedTag)) % colors.length]}; color:#fff; padding:${borderWidth}px; -webkit-box-decoration-break: clone;
-      box-decoration-break: clone; font-family: Georgia, Times, serif;font-size: ${itemFontSizeUnderline}rem; line-height:  ${itemFontSizeUnderline * 1.5}rem;
+      box-decoration-break: clone; font-family: 'Courier New', monospace;font-size: ${itemFontSizeUnderline}rem; line-height:  ${itemFontSizeUnderline * 1.5}rem;
       text-shadow: 2px 2px 6px rgba(0,0,0,.2);box-shadow: 4px 4px 8px rgba(0,0,0,.2);text-align: left;">${visibleContent[index].type}, ${visibleContent[index].year}</span>
       
       <br/>
