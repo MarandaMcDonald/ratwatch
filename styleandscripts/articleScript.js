@@ -152,7 +152,7 @@ function toggleMenu() {
 
     let fgColor = "#555";
     if (isMouseDevice && !isTouchDevice) {
-        fgColor = "#fff";
+        fgColor = "#8E8E90";
     }
 
     if (menuOpen) {
@@ -284,11 +284,11 @@ function styleMenu() {
                 if (isMouseDevice) {
                     const randomColor = colors[colorCount];
                     menuButton.style.background = randomColor;
-                    menuButton.style.color = "#fff";
+                    menuButton.style.color = "#8E8E90";
                 }
             });
             menuButton.addEventListener("mouseleave", () => {
-                menuButton.style.background = "#fff";
+                menuButton.style.background = "#8E8E90";
                 menuButton.style.color = "#555";
             });
             menuButton.addEventListener("click", () => {            // navigation
@@ -302,7 +302,7 @@ function styleMenu() {
         burgerCanvas.style.cursor = "pointer";
         burgerCanvas.style.boxShadow = "3px 3px 7px rgba(0, 0, 0, 0.1)";
         burgerCanvas.style.zIndex = "9999";
-        burgerCanvas.style.background = "#fff";
+        burgerCanvas.style.background = "#8E8E90";
         burgerCanvas.style.transition = "background 0.3s ease";
 
         document.body.appendChild(burgerCanvas);
@@ -600,7 +600,7 @@ function styleRandomButton() {
         colorCount = (Math.floor(Math.random() * 5) + 1 + colorCount) % colors.length;
         const randomColor = colors[colorCount];
         randomButton.style.background = randomColor;
-        randomButton.style.color = "#fff";
+        randomButton.style.color = "#8E8E90";
 
         randomButtonHover = true;
         if (progressAnimationFrameId) {
@@ -611,7 +611,7 @@ function styleRandomButton() {
     };
 
     const mouseLeaveListener = () => {
-        randomButton.style.background = "#fff";
+        randomButton.style.background = "#8E8E90";
         randomButton.style.color = "#555";
 
         randomButtonHover = false;
@@ -707,7 +707,7 @@ function styleArticle() {
     article.style.margin = `0 auto 0 auto`; // center horizontally
     article.style.width = `${articleWidth}px`; // set width 
     article.style.textAlign = "left"; // keep text left-aligned
-    article.style.background = "#fff";
+    article.style.background = "#8E8E90";
     article.style.boxShadow = "3px 3px 7px rgba(0, 0, 0, 0.1)";
 }
 
@@ -733,7 +733,7 @@ function styleTitle() {
     articleTitle.style.textAlign = "center";
     articleTitle.style.fontWeight = "normal";
     articleTitle.style.fontStyle = "italic";
-    articleTitle.style.color = "#fff";
+    articleTitle.style.color = "#8E8E90";
     articleTitle.style.overflowWrap = "break-word"; // wrap words only if they are too long
     articleTitle.style.wordWrap = "break-word"; // fallback for older browsers
     articleTitle.style.background = colors[Math.floor(Math.random() * colors.length)]; // pick time-based bgnd color

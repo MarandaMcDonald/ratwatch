@@ -25,7 +25,9 @@ let numberOfElements = 0; //number of elements in content array (zero-based; thu
 let w, h, ratio;              // width and height of viewport - will be calculated when loaded & resized; w/h ratio
 let cellSize = 1;       //size of a cell in pixel, incl space on the right side and on bottom
 let maxRow = 0;         //stores the number of the lowest row that's filled with content
-let colors = ["DarkRed","MediumVioletRed","OrangeRed","Gold","RebeccaPurple","DarkMagenta","DarkSlateBlue","SeaGreen","DarkGreen","DarkOliveGreen","Teal","SteelBlue","Navy","SaddleBrown","Maroon","SlateGrey","Black","DimGrey"];
+let colors =  ["#5F5449","#9B6A6C","#B09398","#9EBC9E","#9AD1D4"];
+//["#DCC48E","#EAEFD3","#B3C0A4","#505168","#27233A"];
+// //["#3f2a23","#d2d4d9","#8d6f5b","#a1786e","#bda79b","#8e8e90","#d2d4d9","#c3b8b2","#faf0e6","#d7c4a3"];
 let xPosition = [0];    //stores positions of each menu element (top left corner)
 let yPosition = [0];    //standard y-position for menu item
 let imgW = [0];         //stores original pixel-width and -height of image in item
@@ -222,7 +224,7 @@ function layoutSplash() {
         button.style.lineHeight = `${menuButtonFontSize * 1.3}rem`;
         button.style.fontSize = `${menuButtonFontSize}rem`;
         button.style.letterSpacing = `${menuButtonFontSize * 0.1}rem`;
-        button.style.border = `${borderWidth}px solid white`;
+        button.style.border = `${borderWidth}px solid #3f2a23`;
     });
 
 
@@ -446,14 +448,14 @@ function layoutFilter() {
     filterDiv.style.top = 0;
     filterDiv.style.padding = `${borderWidth}px`;
     filterDiv.style.position = "relative";
-    filterDiv.style.background = "white";
+    filterDiv.style.background = "red";
     filterDiv.style.boxShadow = "4px 4px 8px rgba(0,0,0,.1)";
     filterDiv.style.lineHeight = `${menuButtonFontSize * 1.3}rem`;
     filterDiv.style.fontSize = `${menuButtonFontSize}rem`;
     filterDiv.style.display = "flex";
     filterDiv.style.alignItems = "center";
     filterDiv.style.gap = `${borderWidth}px`;
-    filterDiv.style.background = "#fff";
+    filterDiv.style.background = "#3f2a23";
 
     // Style the scrolling wrapper
     tagBarWrapper.style.flexGrow = 1;
@@ -479,8 +481,8 @@ function layoutFilter() {
     //  Style the horizontal tag scroll buttons
     const scrollButtons = document.querySelectorAll('.scrollButton');
     scrollButtons.forEach(btn => {
-        btn.style.background = '#0af';
-        btn.style.color = 'white';
+        btn.style.background = '#3F2A23';
+        btn.style.color = '#FAF0E6';
         btn.style.fontFamily = 'futuraMR';
         btn.style.fontSize = `${itemFontSize}rem`;
         btn.style.letterSpacing = `${itemFontSize * 0.1}rem`;
@@ -496,13 +498,13 @@ function layoutFilter() {
 
         // Add hover effects
         btn.onmouseover = () => {
-            btn.style.background = '#fff';
-            btn.style.color = '#0af';
+            btn.style.background = '#FAF0E6';
+            btn.style.color = '#3F2A23';
 
         };
         btn.onmouseout = () => {
-            btn.style.background = '#0af';
-            btn.style.color = '#fff';
+            btn.style.background = '#3F2A23';
+            btn.style.color = '#FAF0E6';
         };
     });
 }
@@ -777,7 +779,7 @@ function renderTagBar() {
         // Base styles
         btn.style.cssText = `
         background: rgba(96, 29, 79, 1);
-        color: white;
+        color: black;
         font-family: 'Courier New', monospace; 
         font-size: ${tagFontSize}rem;
         letter-spacing: ${tagFontSize * 0.1}rem;
@@ -792,11 +794,11 @@ function renderTagBar() {
         const updateStyles = () => {
             const isSelectedNow = selectedTag === tagValue;
             if (isSelectedNow) {
-                btn.style.background = '#125f00ff';
-                btn.style.color = 'rgba(71, 6, 57, 1)';
+                btn.style.background = '#d7c4a3';
+                btn.style.color = '#8d6f5b';
             } else {
-                btn.style.background = 'rgba(71, 6, 57, 1)';
-                btn.style.color = '#125f00ff';
+                btn.style.background = '#8d6f5b';
+                btn.style.color = '#d7c4a3';
             }
         };
 
@@ -920,7 +922,7 @@ function drawRect(format, index) { //draws a single menu item and appends it to 
     left: ${xPosition[index]}px;
     top: ${yPosition[index]}px;
     box-shadow: 4px 4px 8px rgba(0,0,0,.1);
-    background:#fff;
+    background:${colors[(index + 7 + hash(selectedTag)) % colors.length]};
     transition: top 0.5s, background-color 0.5s;
   `;
 
@@ -931,15 +933,15 @@ function drawRect(format, index) { //draws a single menu item and appends it to 
     //build the inner HTML content as a single string
     let content = `
     <div style="  width: ${xSize - borderWidth * 2}px; height: ${ySize - borderWidth * 2}px; display: inline-block; position: absolute; 
-    left: ${borderWidth}px; top: ${borderWidth}px; overflow:hidden; background:${colors[(index + 7 + hash(selectedTag)) % colors.length]};">
+    left: ${borderWidth}px; top: ${borderWidth}px; overflow:hidden;  background:${colors[(index + 7 + hash(selectedTag)) % colors.length]};">
       <img id="img${index}" src="random/images/1x1.png" style="${format === 'landscape' ? `width:${cellSize * 2 + borderWidth * 4}px;` : `height:${ySize + borderWidth * 4}px;`
         } position:absolute; left:0px; top:0px;">
     </div>
 
-    <div style=" max-width: ${xSize - borderWidth * 3}px; max-height: ${ySize - borderWidth * 2}px; color:#fff; display: inline-block; position: absolute; 
+    <div style=" max-width: ${xSize - borderWidth * 3}px; max-height: ${ySize - borderWidth * 2}px; color:#3F2A23; display: inline-block; position: absolute; 
     left: ${borderWidth * 2}px; top: ${borderWidth * 2}px; overflow:hidden; text-align: left;">
       
-    <span style="white-space: pre-wrap; hyphens:auto; word-break: break-word; overflow-wrap: break-word; background:${colors[(index + hash(selectedTag)) % colors.length]}; 
+    <span style="white-space: pre-wrap; hyphens:auto; word-break: break-word; overflow-wrap: break-word; color:#000; background:${colors[(index + hash(selectedTag)) % colors.length]}; 
       padding:${borderWidth}px; -webkit-box-decoration-break: clone;box-decoration-break: clone;font-family: 'Courier New', monospace;font-size: ${itemFontSize}rem; 
       line-height:  ${itemFontSize * 1.5}rem; font-style: italic; text-align: left; text-shadow: 2px 2px 8px rgba(0,0,0,.2);
       box-shadow: 4px 4px 8px rgba(0,0,0,.2);">${visibleContent[index].title}</span>
@@ -948,7 +950,7 @@ function drawRect(format, index) { //draws a single menu item and appends it to 
 
       <div style="height:6px;display:block;"></div>
       <span style="white-space: pre-wrap; hyphens:auto; word-break: break-word; overflow-wrap: 
-      break-word;background:${colors[(index + hash(selectedTag)) % colors.length]}; color:#fff; padding:${borderWidth}px; -webkit-box-decoration-break: clone;
+      break-word;background:${colors[(index + hash(selectedTag)) % colors.length]}; color:#000; padding:${borderWidth}px; -webkit-box-decoration-break: clone;
       box-decoration-break: clone; font-family: 'Courier New', monospace;font-size: ${itemFontSizeUnderline}rem; line-height:  ${itemFontSizeUnderline * 1.5}rem;
       text-shadow: 2px 2px 6px rgba(0,0,0,.2);box-shadow: 4px 4px 8px rgba(0,0,0,.2);text-align: left;">${visibleContent[index].type}, ${visibleContent[index].year}</span>
       
@@ -973,7 +975,7 @@ function mouseOverBox(element, index) {
 ///////////////////////////////////////////////////////////////////--------------------------CHANGE STYLE WHEN MOUSE OUTSIDE MENU BOX
 function mouseOutBox(element, index) {
     //change color of frame
-    element.style.backgroundColor = '#fff';
+    element.style.backgroundColor = '#8e8e90';
 }
 ///////////////////////////////////////////////////////////////////--------------------------HAPPENS WHEN SCROLLED - CARES ABOUT LOADING MENU IMAGES
 let pTempScrollPos = 0;
