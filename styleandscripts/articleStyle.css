@@ -1,9 +1,11 @@
   @font-face {
     font-family: futuraM;
+    font-display: auto; /*added to improve performance?*/
     src: url('webfonts/futura-medium-webfont.woff2') format('woff2'),
       url('webfonts/futura-medium-webfont.woff') format('woff');
   }
 
+  
   .futura-font {
     font-family: futuraM, sans-serif;
   }

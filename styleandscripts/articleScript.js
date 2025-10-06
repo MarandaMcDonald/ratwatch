@@ -20,7 +20,7 @@ let isMouseDevice = false; // set to true at first mouse click
 
 
 
-var colors = ["Orange", "BlueViolet", "DeepPink", "DarkTurquoise", "Fuchsia", "Gold", "HotPink", "MediumBlue", "OrangeRed", "DodgerBlue", "MediumVioletRed", "LimeGreen"];
+var colors = ["DarkRed","MediumVioletRed","OrangeRed","Gold","RebeccaPurple","DarkMagenta","DarkSlateBlue","SeaGreen","DarkGreen","DarkOliveGreen","Teal","SteelBlue","Navy","SaddleBrown","Maroon","SlateGrey","Black","DimGrey"];
 
 const menuItems = [
     { text: "HOME", url: "https://www.tajweird.com/" },
@@ -270,7 +270,7 @@ function styleMenu() {
             const menuButton = document.createElement("div");
             menuButton.textContent = item.text;
             menuButton.style.margin = "0";
-            menuButton.style.background = "#fff";
+            menuButton.style.background = "#5b5858ff";
             menuButton.style.color = "#555";
             menuButton.style.textAlign = "center";
             menuButton.style.cursor = "pointer";
@@ -315,15 +315,15 @@ function styleMenu() {
             const randomColor = colors[colorCount];
             burgerCanvas.style.background = randomColor;
             if (menuOpen) {
-                drawClose("#fff");
+                drawClose("#000000ff");
             } else {
-                drawBurger("#fff");
+                drawBurger("#363636ff");
             }
         });
 
         burgerCanvas.addEventListener("mouseleave", () => {
             if (isTouchDevice && !isMouseDevice) return; // no hover for touch
-            burgerCanvas.style.background = "#fff";
+            burgerCanvas.style.background = "#000000ff";
             if (menuOpen) {
                 drawClose("#555");
             } else {
@@ -433,9 +433,9 @@ function defaultRandomButtonStyle() {
 
     randomButton.style.letterSpacing = `${menuFontSize * .07}rem`;
     randomButton.style.padding = `${borderWidth * 2}px ${borderWidth}px`;
-    randomButton.style.color = "#555";
+    randomButton.style.color = "#7a0069ff";
     randomButton.style.textAlign = "center";
-    randomButton.style.background = "#fff";
+    randomButton.style.background = "#070404ff";
     randomButton.style.boxShadow = "3px 3px 7px rgba(0, 0, 0, 0.1)";
     randomButton.style.width = `${buttonWidth - 12}px`;
     randomButton.style.position = "relative";                   // initialize non-sticky styles

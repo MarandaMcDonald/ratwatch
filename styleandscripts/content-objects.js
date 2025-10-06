@@ -13,25 +13,15 @@ const contentObject = [
     "yPos": 0.4
   },
   {
-    "image": ".jpg",
-    "title": "",
-    "url": "https://www.tajweird.com/oneEuro/",
-    "type": "",
-    "year": "",
+    "image": "polomallet.jpg",
+    "title": "Fancy Bartape Wrapping",
+    "url": "https://www.tajweird.com/HarlequinBarTapeWrap",
+    "type": "Method",
+    "year": "2021/2024",
     "tags": [
-      ""
+      "Bikes"
     ],
     "xPos": 0.52,
     "yPos": 0.39
   },
-  {
-    "image": "86.jpg",
-    "title": "Trigon",
-    "url": "https://www.tajweird.com/project/86/trigon",
-    "type": "Shortfilm",
-    "year": "1998",
-    "tags": [],
-    "xPos": 0.2,
-    "yPos": 0.55
-  }
 ];
