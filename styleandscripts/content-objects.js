@@ -188,7 +188,7 @@ const contentObject = [
     "image": "RoadsideFix.jpg",
     "title": "Roadside Repairs",
     "url": "https://tajweird.com/random/images/RoadsideFix.jpg",
-    "type": "Reuse",
+    "type": "Reuse, Travels",
     "year": "June 2021",
     "tags": [
       "Bikes",
@@ -196,8 +196,48 @@ const contentObject = [
     ],
     "xPos": 0.3,
     "yPos": 0.3
-  }
+  },
   
+  {
+    "image": "guillotine.jpg",
+    "title": "ChopChop!",
+    "url": "https://tajweird.com/random/images/guillotine.jpg",
+    "type": "Creation",
+    "year": "July 2024",
+    "tags": [
+      "Metalworking"
+    ],
+    "xPos": 0.5,
+    "yPos": 0.5
+  }
+  ,
+  
+  {
+    "image": "Toorcamp.jpg",
+    "title": "Hacker Summer Camp",
+    "url": "https://tajweird.com/random/images/Toorcamp.jpg",
+    "type": "Travels",
+    "year": "July 2023",
+    "tags": [
+      "Bikes",
+      "Cyber"
+    ],
+    "xPos": 0.5,
+    "yPos": 0.5
+  },
+  
+  {
+    "image": "KnifeSNTL.jpg",
+    "title": "Knifemaking",
+    "url": "https://tajweird.com/random/images/KnifeSNTL.jpg",
+    "type": "Creation",
+    "year": "November 2021",
+    "tags": [
+      "Metalwork"
+    ],
+    "xPos": 0.3,
+    "yPos": 0.3
+  }
   
   
   

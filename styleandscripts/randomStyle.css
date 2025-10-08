@@ -1,0 +1,54 @@
+@font-face {
+    font-family: futuraM;
+    src: url(webfonts/futura-medium.woff) format('woff');
+}
+
+html {
+  overflow:hidden;
+  
+  font-size: 20px; /* base font size */
+}
+
+body {
+    background-color: #ccc;
+    padding: 0px;
+    margin: 0px;
+    overflow:hidden;
+    position: relative;
+}
+
+#data{
+  position: fixed;
+  left:0px;
+  top:0px;
+  background: rgba(255,255,255,0.5);
+  z-index: 1001;
+}
+img {
+  visibility: hidden;
+  position: fixed;
+
+  left:-200px;
+  border: solid 5px white;
+  box-shadow: 3px 3px 10px rgba(0,0,0,0.3);
+}
+
+#random-text {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 80vw;
+  width: max-content;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  font-family: futuraM;
+  font-size: 36px;
+  text-align: center;
+  padding: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: white; 
+  border: solid 5px white;
+  box-shadow: 3px 3px 10px rgba(0,0,0,0.3);
+  text-shadow:1px 1px 2px rgba(0,0,0,0.3);
+}

@@ -1,0 +1,317 @@
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>404</title>
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+<style>
+html, body {
+  height: 100%; margin: 0; background: #000; cursor: pointer; overflow: hidden;
+
+}
+
+
+
+html, body, canvas#screen {
+  touch-action: none;          /* disables scrolling/pinch */
+  -webkit-user-select: none;   /* disables text selection */
+  -webkit-tap-highlight-color: transparent; /* removes blue overlay on tap */
+}
+
+
+canvas#screen {
+  position: fixed; inset: 0; width: 100%; height: 100%; display: block;
+  background: transparent;
+}
+</style>
+</head>
+<body>
+<canvas id="screen" width="1890" height="1836" style="width: 945px; height: 918px;"></canvas>
+<script>
+/* ---------------- ASCII Art & Palette ---------------- */
+const ascii = `
+
+
+
+ #    #### #    
+ #    #  # #    
+ # #  #  # # #  
+ # #  #  # # #  
+ # #  #  # # #  
+ #### #  # #### 
+   #  #  #   #  
+   #  #  #   #  
+   #  ####   # 
+
+   
+
+`;
+
+const colors =  ["#5F5449","#9B6A6C","#B09398","#9EBC9E","#9AD1D4", "#DCC48E","#EAEFD3","#B3C0A4","#505168","#27233A"];
+
+
+/* ---------------- Canvas ---------------- */
+const canvas = document.getElementById('screen');
+const ctx = canvas.getContext('2d', { alpha: true });
+let DPR = Math.max(1, window.devicePixelRatio || 1);
+
+/* ---------------- Explosion ---------------- */
+let explosion = { active: false, x:0, y:0, startTime:0, duration:1000 };
+let bgTimer = 0;
+
+/* ---------------- Sound ---------------- */
+const audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+let explosionBuffer = null;
+
+function generateExplosionSound(){
+  const sampleRate = audioCtx.sampleRate;
+  const duration = .8;
+  const length = Math.floor(sampleRate*duration);
+  const buffer = audioCtx.createBuffer(1,length,sampleRate);
+  const data = buffer.getChannelData(0);
+  const f1Start=190,f1End=1100,f2Start=400,f2End=2000;
+  const glide=(t,f0,f1,dur)=>f0*Math.pow(f1/f0,t/dur);
+  for(let i=0;i<length;i++){
+    const t=i/sampleRate;
+    const f1=glide(t,f1Start,f1End,duration);
+    const f2=glide(t,f2Start,f2End,duration);
+    const env=Math.exp(-t*5);
+    data[i]=(Math.sin(2*Math.PI*f1*t)*0.6+Math.sin(2*Math.PI*f2*t)*0.4)*env;
+  }
+  return buffer;
+}
+explosionBuffer=generateExplosionSound();
+
+function playExplosionSound(){
+  if(!explosionBuffer) return;
+  const startSource=()=>{
+    const source=audioCtx.createBufferSource();
+    source.buffer=explosionBuffer;
+    const filter=audioCtx.createBiquadFilter(); filter.type='lowpass'; filter.frequency.value=2000;
+    const gainNode=audioCtx.createGain(); gainNode.gain.value=0.3;
+    source.connect(filter); filter.connect(gainNode); gainNode.connect(audioCtx.destination);
+    source.start(0);
+  };
+  if(audioCtx.state==='suspended'){ audioCtx.resume().then(startSource).catch(()=>{}); }
+  else startSource();
+}
+
+/* ---------------- Parse ASCII ---------------- */
+function parseAscii(a){
+  let lines=a.split('\n').map(l=>l.replace(/\r/g,''));
+  if(lines[0].trim()==='') lines.shift();
+  if(lines[lines.length-1].trim()==='') lines.pop();
+  const rows=lines.length;
+  const cols=Math.max(...lines.map(l=>l.length));
+  const grid=[];
+  for(let r=0;r<rows;r++){
+    const row=[];
+    for(let c=0;c<cols;c++){
+      const ch=(c<lines[r].length)?lines[r][c]:' ';
+      row.push(ch!==' ');
+    }
+    grid.push(row);
+  }
+  return {grid,rows,cols,lines};
+}
+const parsed=parseAscii(ascii);
+
+/* ---------------- Tiles ---------------- */
+let tiles=[], tileSize=12, gap=0, gridX=0, gridY=0, gridW=0, gridH=0;
+function rndOffset(){ return (Math.random()-0.5)*window.innerWidth; }
+
+function layoutGrid(){
+  const W=window.innerWidth,H=window.innerHeight;
+  const rows=parsed.rows, cols=parsed.cols;
+  let t=Math.floor(Math.min(W/cols,H/rows));
+  if(t<6) t=6;
+  tileSize=t; gap=Math.max(0,Math.floor(tileSize*0.1));
+  gridW=cols*tileSize; gridH=rows*tileSize;
+  gridX=Math.floor((W-gridW)/2); gridY=Math.floor((H-gridH)/2);
+  const newTiles=[];
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const on=parsed.grid[r][c];
+      const baseX=gridX+c*tileSize+Math.floor(gap/2);
+      const baseY=gridY+r*tileSize+Math.floor(gap/2);
+      newTiles.push({
+        r,c,on,baseX,baseY,size:tileSize-gap,
+        ox:rndOffset(), oy:rndOffset(),
+        vx:0, vy:0,
+        phase:Math.random()*Math.PI*2,
+        freq:0.8+Math.random()*1.6,
+        mass:1+Math.random()*0.6,
+        colorIndex:Math.floor(Math.random()*colors.length)
+      });
+    }
+  }
+  tiles=newTiles;
+}
+
+/* ---------------- Resize ---------------- */
+function resizeCanvas(){
+  DPR=Math.max(1,window.devicePixelRatio||1);
+  const w=Math.max(1,Math.floor(window.innerWidth));
+  const h=Math.max(1,Math.floor(window.innerHeight));
+  canvas.style.width=w+'px'; canvas.style.height=h+'px';
+  canvas.width=Math.floor(w*DPR); canvas.height=Math.floor(h*DPR);
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  layoutGrid();
+}
+window.addEventListener('resize',resizeCanvas,{passive:true});
+
+/* ---------------- Pointer / Mouse ---------------- */
+const mouse = { x: -9999, y: -9999 };
+const targetMouse = { x: -9999, y: -9999 };
+let fingerActive = false;
+
+canvas.addEventListener('pointerdown', e => {
+    e.preventDefault(); // very important for Chrome touch
+    targetMouse.x = e.clientX;
+    targetMouse.y = e.clientY;
+    fingerActive = e.pointerType !== 'mouse';
+}, { passive: false });
+
+canvas.addEventListener('pointermove', e => {
+    e.preventDefault(); // allows smooth touch tracking in Chrome
+    targetMouse.x = e.clientX;
+    targetMouse.y = e.clientY;
+}, { passive: false });
+
+canvas.addEventListener('pointerup', e => {
+    e.preventDefault();
+    if (e.pointerType !== 'mouse') {
+        targetMouse.x = -9999;
+        targetMouse.y = -9999;
+        fingerActive = false;
+    }
+}, { passive: false });
+
+canvas.addEventListener('pointercancel', e => {
+    e.preventDefault();
+    targetMouse.x = -9999;
+    targetMouse.y = -9999;
+    fingerActive = false;
+}, { passive: false });
+
+/* ---------------- Click Explosion ---------------- */
+canvas.addEventListener('click',e=>{
+  if(explosion.active) return;
+  explosion.active=true; explosion.x=e.clientX; explosion.y=e.clientY; explosion.startTime=performance.now();
+  playExplosionSound();
+  setTimeout(()=>{ window.location.href='https://niklasroy.com/random'; }, explosion.duration);
+});
+
+/* ---------------- Pageshow ---------------- */
+window.addEventListener("pageshow",(event)=>{
+  let navType='';
+  try{ const entries=performance.getEntriesByType&&performance.getEntriesByType('navigation')||[];
+       if(entries.length) navType=entries[0].type||''; } catch(e){ navType=''; }
+  if(event.persisted||navType==='back_forward'){
+    explosion.active=false; tiles=[]; layoutGrid();
+    document.body.style.background="#000"; canvas.style.background="transparent";
+    bgTimer=0;
+  }
+});
+
+/* ---------------- Background randomizer ---------------- */
+function randomBodyBackground(colors,time,lastTime){
+  const interval=0.15;
+  if(time>lastTime){
+    lastTime=time+interval;
+    const idx=Math.floor(Math.random()*colors.length);
+    const c=colors[idx];
+    document.body.style.background=c;
+    canvas.style.background=c;
+  }
+  return lastTime;
+}
+
+/* ---------------- Animation / Physics ---------------- */
+let lastTime=performance.now();
+function animate(now){ const dt=Math.min(48,now-lastTime); lastTime=now;
+  step(now,dt/1000); render(); requestAnimationFrame(animate); 
+}
+
+function step(now,delta){
+  const springK=5, neighborInfluence=4, damping=10;
+  const mouseRadius=Math.max(30,tileSize*3), mouseForce=1800, bobAmplitude=Math.max(0.6,tileSize*0.06);
+  const rows=parsed.rows, cols=parsed.cols;
+
+  // interpolate towards targetMouse if touch active
+  mouse.x+=(targetMouse.x-mouse.x)*0.25; 
+  mouse.y+=(targetMouse.y-mouse.y)*0.25; 
+
+  let explosionProgress=0;
+  if(explosion.active){ explosionProgress=Math.min(1,(now-explosion.startTime)/explosion.duration); bgTimer=randomBodyBackground(colors,now/1000,bgTimer); }
+
+  const neighborOffsets=tiles.map(()=>({x:0,y:0,count:0}));
+  if(!explosion.active){
+    for(let i=0;i<tiles.length;i++){
+      const t=tiles[i]; if(!t.on) continue;
+      const r=t.r,c=t.c;
+      for(let dr=-1;dr<=1;dr++){
+        for(let dc=-1;dc<=1;dc++){
+          if(dr===0&&dc===0) continue;
+          const rr=r+dr, cc=c+dc; if(rr<0||cc<0||rr>=rows||cc>=cols) continue;
+          const j=rr*cols+cc; if(!tiles[j]||!tiles[j].on) continue;
+          const w=(Math.abs(dr)+Math.abs(dc)===2)?0.5:1;
+          neighborOffsets[i].x+=tiles[j].ox*w;
+          neighborOffsets[i].y+=tiles[j].oy*w;
+          neighborOffsets[i].count+=w;
+        }
+      }
+    }
+  }
+
+  for(let t of tiles){
+    if(!t.on){ t.vx+=(-t.ox*springK*0.08)/t.mass*delta; t.vy+=(-t.oy*springK*0.08)/t.mass*delta;
+      t.vx*=(1-Math.min(0.3,damping*delta)); t.vy*=(1-Math.min(0.3,damping*delta));
+      t.ox+=t.vx*delta*60; t.oy+=t.vy*delta*60; continue;
+    }
+
+    if(explosion.active){
+      const cx=t.baseX+t.ox+t.size/2, cy=t.baseY+t.oy+t.size/2;
+      const dx=cx-explosion.x, dy=cy-explosion.y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist>1){ const f=15000/(dist*0.5+1); t.vx+=(dx/dist)*f*delta; t.vy+=(dy/dist)*f*delta; }
+    } else {
+      const fx=-t.ox*springK, fy=-t.oy*springK;
+      const nb=neighborOffsets[t.r*cols+t.c];
+      let nbx=0,nby=0; if(nb.count>0){ nbx=(nb.x/nb.count-t.ox)*neighborInfluence*springK; nby=(nb.y/nb.count-t.oy)*neighborInfluence*springK; }
+      const bobFx=Math.cos(t.phase+now/3000*t.freq)*(bobAmplitude*15);
+      const bobFy=Math.sin(t.phase+now/3000*t.freq)*(bobAmplitude*15);
+      let mfx=0,mfy=0;
+      const mx=(t.baseX+t.ox+t.size/2)-mouse.x;
+      const my=(t.baseY+t.oy+t.size/2)-mouse.y;
+      const md=Math.sqrt(mx*mx+my*my);
+      if(mouse.x>=0&&md<mouseRadius){ const f=mouseForce*(1-md/mouseRadius); const inv=md>1?1/md:1; mfx=mx*inv*f; mfy=my*inv*f;
+        const p=(1-md/mouseRadius)*0.05; if(Math.random()<p){ let newIdx; do{ newIdx=Math.floor(Math.random()*colors.length); } while(newIdx===t.colorIndex); t.colorIndex=newIdx; }
+      }
+      if(Math.random()<0.001){ let newIdx; do{ newIdx=Math.floor(Math.random()*colors.length); } while(newIdx===t.colorIndex); t.colorIndex=newIdx; }
+      const totalFx=fx+nbx+bobFx+mfx, totalFy=fy+nby+bobFy+mfy;
+      t.vx+=(totalFx/t.mass)*delta; t.vy+=(totalFy/t.mass)*delta;
+      t.vx*=(1-Math.min(0.45,damping*delta)); t.vy*=(1-Math.min(0.45,damping*delta));
+    }
+    t.ox+=t.vx*delta*60; t.oy+=t.vy*delta*60;
+    if(!explosion.active){ const maxO=tileSize*1; if(t.ox>maxO) t.ox=maxO; if(t.ox<-maxO) t.ox=-maxO; if(t.oy>maxO) t.oy=maxO; if(t.oy<-maxO) t.oy=-maxO; }
+  }
+}
+
+/* ---------------- Render ---------------- */
+function render(){
+  const W=window.innerWidth,H=window.innerHeight;
+  ctx.clearRect(0,0,W,H);
+  for(let t of tiles){
+    if(!t.on) continue;
+    const x=t.baseX+t.ox, y=t.baseY+t.oy, s=t.size;
+    ctx.fillStyle=colors[t.colorIndex];
+    ctx.fillRect(Math.round(x),Math.round(y),Math.round(s),Math.round(s));
+  }
+}
+
+/* ---------------- Init ---------------- */
+layoutGrid();
+resizeCanvas();
+requestAnimationFrame(animate);
+</script>
+</body></html>
