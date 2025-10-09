@@ -1,5 +1,4 @@
 const contentObject = [
-  
   {
     "image": "ToiletRacer2.jpg",
     "title": "Hampden Toiletbowl Races!",
@@ -32,7 +31,7 @@ const contentObject = [
     "yPos": 0.4
   },
   {
-    "image": "Openworks Tallbike Stripped.jpg",
+    "image": "OpenworksTallbikeStripped.jpg",
     "title": "My first tallbike",
     "url": "https://www.tajweird.com/FirstTallBike*",
     "type": "Creation, Repair",
@@ -40,12 +39,13 @@ const contentObject = [
     "tags": [
       "Bikes",
       "Freakbikes",
+      "Article"
     ],
     "xPos": 0.5,
     "yPos": 0.1
   },
   {
-    "image": "Tall Bike 3 - Kamakazi Carl.jpg",
+    "image": "TallBike3-KamakaziCarl.jpg",
     "title": "Baltimore Community Builds",
     "url": "https://www.tajweird.com/OtherTallBikes*",
     "type": "Creation",
@@ -53,6 +53,7 @@ const contentObject = [
     "tags": [
       "Bikes",
       "Freakbikes",
+      "Article"
     ],
     "xPos": 0.5,
     "yPos": 0.5
@@ -66,7 +67,8 @@ const contentObject = [
     "tags": [
       "Events",
       "Crafts",
-      "Art"
+      "Art",
+      "Article"
     ],
     "xPos": 0.5,
     "yPos": 0.1
@@ -107,7 +109,8 @@ const contentObject = [
     "year": "2023/2024/2025",
     "tags": [
       "Freakbikes",
-      "Events"
+      "Events",
+      "Article"
     ],
     "xPos": 0.5,
     "yPos": 0.4
@@ -120,7 +123,8 @@ const contentObject = [
     "year": "2021/2024",
     "tags": [
       "Bikes",
-      "Crafts"
+      "Crafts",
+      "Article"
     ],
     "xPos": 0.52,
     "yPos": 0.39
@@ -170,9 +174,9 @@ const contentObject = [
   },
   
   {
-    "image": "Cosmosaurus Startline.jpg",
+    "image": "CosmosaurusStartline.jpg",
     "title": "Cosmosaurus!",
-    "url": "https://tajweird.com/random/images/Cosmosaurus Startline.jpg",
+    "url": "https://tajweird.com/random/images/CosmosaurusStartline.jpg",
     "type": "Kinetic Sculpture Race Creation",
     "year": "May 2025",
     "tags": [

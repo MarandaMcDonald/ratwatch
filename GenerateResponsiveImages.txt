@@ -1,0 +1,8 @@
+#!/bin/bash
+for img in *.jpg; do
+    base="${img%.*}"
+    magick "$img" -resize 400 "${base}-400w.webp"
+    magick "$img" -resize 600 "${base}-600w.webp"
+    magick "$img" -resize 800 "${base}-800w.webp"
+    magick "$img" -resize 1000 "${base}-1000w.webp"
+done

@@ -20,7 +20,7 @@ article and randomizer js to load data from new object array database
 */
 
 
-let verbose = 0;        //turn debug overlay & console logs on and off
+let verbose = 1;        //turn debug overlay & console logs on and off
 let numberOfElements = 0; //number of elements in content array (zero-based; thus value in this let is one less than actual number of elements)
 let w, h, ratio;              // width and height of viewport - will be calculated when loaded & resized; w/h ratio
 let cellSize = 1;       //size of a cell in pixel, incl space on the right side and on bottom
@@ -1172,6 +1172,9 @@ function positionImg(index, zoom) {
 
 
 ///////////////////////////////////////////////////////////////////--------------------------ENHANCED LOAD IMAGE FUNCTION
+
+// FIXED VERSION - Replace your loadImg and positionImg functions with these
+
 function loadImg(index) {
     // Validate index
     if (index < 0 || index >= numberOfElements) {
@@ -1179,45 +1182,436 @@ function loadImg(index) {
         return;
     }
 
-    // Generate URL with fallback
+    // Get base filename without extension
     let imgFileName = visibleContent[index].image;
     if (imgFileName === null) { imgFileName = 'placeholder.jpg' };
-
-    let imgURL = 'random/images/' + imgFileName;
+    
+    let baseFileName = imgFileName.replace(/\.(jpg|jpeg|png|gif)$/i, '');
     let imgID = 'img' + index;
 
-    let imgElement = document.getElementById(imgID);
-    if (!imgElement) {
+    if (verbose === 1) {
+        console.log('loadImage ' + index + ' - baseFileName: ' + baseFileName);
+    }
+
+    // Get the existing img element (not picture yet)
+    let oldImgElement = document.getElementById(imgID);
+    if (!oldImgElement) {
         console.warn(`Image element ${imgID} not found`);
         return;
     }
-
-    if (verbose === 1) {
-        console.log('loadImage ' + index + ' - ' + imgURL);
+    
+    let parentDiv = oldImgElement.parentElement;
+    if (!parentDiv) {
+        console.warn(`Parent container for ${imgID} not found`);
+        return;
     }
 
-    // Add error handling for failed image loads
-    imgElement.onerror = function () {
-        console.warn(`Failed to load image: ${imgURL}`);
-        // Set a placeholder or default image
-        this.src = 'random/images/placeholder.jpg';
-        // Still try to position it
-        setTimeout(() => positionImg(index, 0), 100);
+    // Create picture element with multiple sources
+    let picture = document.createElement('picture');
+    picture.id = imgID;
+    
+    // Calculate appropriate sizes attribute based on cell format
+    let sizesAttr;
+    if (cellFormat[index] === 'landscape') {
+        sizesAttr = `(max-width: 768px) 100vw, ${Math.round(cellSize * 2)}px`;
+    } else if (cellFormat[index] === 'portrait') {
+        sizesAttr = `(max-width: 768px) 100vw, ${Math.round(cellSize)}px`;
+    } else {
+        sizesAttr = `(max-width: 768px) 100vw, ${Math.round(cellSize)}px`;
+    }
+
+    // AVIF sources with different sizes
+    let avifSource = document.createElement('source');
+    avifSource.type = 'image/avif';
+    avifSource.srcset = `random/images/${baseFileName}-400w.avif 400w, random/images/${baseFileName}-600w.avif 600w, random/images/${baseFileName}-800w.avif 800w, random/images/${baseFileName}-1000w.avif 1000w`;
+    avifSource.sizes = sizesAttr;
+    
+    // WebP fallback
+    let webpSource = document.createElement('source');
+    webpSource.type = 'image/webp';
+    webpSource.srcset = `random/images/${baseFileName}-400w.webp 400w, random/images/${baseFileName}-600w.webp 600w, random/images/${baseFileName}-800w.webp 800w, random/images/${baseFileName}-1000w.webp 1000w`;
+    webpSource.sizes = sizesAttr;
+    
+    // JPG fallback with srcset
+    let img = document.createElement('img');
+    //img.srcset = `random/images/${baseFileName}.jpg 400w, random/images/${baseFileName}-600w.jpg 600w, random/images/${baseFileName}-800w.jpg 800w, random/images/${baseFileName}-1000w.jpg 1000w`;
+    img.sizes = sizesAttr;
+    img.src = `random/images/${imgFileName}`; // Ultimate fallback to original
+    img.alt = visibleContent[index].title;
+    img.style.cssText = 'position: absolute; opacity: 0; transition: opacity 1s;';
+    
+    // Add error handling - if responsive images fail, try original
+    img.onerror = function () {
+        console.warn(`Failed to load responsive images for: ${baseFileName}, trying original`);
+        // Clear srcset and try original file
+        this.srcset = '';
+        this.src = 'random/images/' + imgFileName;
+        
+        // If that also fails, use placeholder
+        this.onerror = function() {
+            console.warn(`Original also failed, using placeholder`);
+            this.src = 'random/images/placeholder.jpg';
+            setTimeout(() => positionImg(index, 0), 100);
+        };
     };
-
-    // Load the image
-    imgElement.src = imgURL;
-
-    // When new image is loaded: position image inside div
-    imgElement.onload = function () {
-        // Ensure image has loaded with valid dimensions
+    
+    // When image is loaded: position it
+    img.onload = function () {
+        if (verbose === 1) {
+            console.log(`Image loaded for index ${index}: ${this.currentSrc || this.src}`);
+            console.log(`  Natural dimensions: ${this.naturalWidth}x${this.naturalHeight}`);
+        }
+        
         if (this.naturalWidth > 0 && this.naturalHeight > 0) {
             positionImg(index, 0);
             imgIsLoaded[index] = 1;
         } else {
-            console.warn(`Image loaded but has invalid dimensions: ${imgURL}`);
+            console.warn(`Image loaded but has invalid dimensions: ${baseFileName}`);
         }
     };
+    
+    // Assemble the picture element
+    picture.appendChild(avifSource);
+    picture.appendChild(webpSource);
+    picture.appendChild(img);
+    
+    // Copy positioning styles from old element to picture wrapper
+    picture.style.cssText = oldImgElement.style.cssText;
+    
+    // Replace the old img element with the new picture element
+    parentDiv.replaceChild(picture, oldImgElement);
+    
+    if (verbose === 1) {
+        console.log(`Picture element created for index ${index}`);
+    }
+}
+
+// Updated positionImg to work with picture elements
+function positionImg(index, zoom) {
+    let imgID = 'img' + index;
+    let pictureElement = document.getElementById(imgID);
+    
+    if (!pictureElement) {
+        console.warn(`Picture element ${imgID} not found`);
+        return;
+    }
+    
+    // Get the actual img element inside the picture
+    let imgElement = pictureElement.querySelector('img');
+    if (!imgElement) {
+        console.warn(`Image inside picture ${imgID} not found`);
+        return;
+    }
+
+    // Find original image dimensions 
+    imgW[index] = imgElement.naturalWidth || imgElement.width;
+    imgH[index] = imgElement.naturalHeight || imgElement.height;
+
+    // Validate image dimensions
+    if (imgW[index] <= 0 || imgH[index] <= 0) {
+        console.warn(`Invalid image dimensions for index ${index}: ${imgW[index]}x${imgH[index]}`);
+        return;
+    }
+
+    // Store original dimensions in temporary variables
+    let tempW = imgW[index];
+    let tempH = imgH[index];
+
+    // Validate and clamp positioning values (0-1 range)
+    let xPos = parseFloat(visibleContent[index].xPos) || 0.5;
+    let yPos = parseFloat(visibleContent[index].yPos) || 0.5;
+
+    xPos = Math.max(0, Math.min(1, xPos));
+    yPos = Math.max(0, Math.min(1, yPos));
+
+    // Set base styles - picture wrapper stays positioned absolute
+    pictureElement.style.position = 'absolute';
+    pictureElement.style.left = '0px';
+    pictureElement.style.top = '0px';
+    pictureElement.style.width = '100%';
+    pictureElement.style.height = '100%';
+    pictureElement.style.overflow = 'hidden';
+    
+    // Set img element styles
+    imgElement.style.position = 'absolute';
+    imgElement.style.opacity = 1;
+
+    // Calculate container dimensions based on cell format
+    let containerW, containerH;
+
+    if (cellFormat[index] === 'landscape') {
+        containerW = cellSize * 2 - borderWidth;
+        containerH = cellSize - borderWidth;
+    } else if (cellFormat[index] === 'portrait') {
+        containerW = cellSize - borderWidth;
+        containerH = cellSize * 2 - borderWidth;
+    } else {
+        containerW = cellSize - borderWidth;
+        containerH = cellSize - borderWidth;
+    }
+
+    // Validate container dimensions
+    if (containerW <= 0 || containerH <= 0) {
+        console.warn(`Invalid container dimensions: ${containerW}x${containerH}`);
+        return;
+    }
+
+    // Calculate image aspect ratio and container aspect ratio
+    let imgAspectRatio = tempW / tempH;
+    let containerAspectRatio = containerW / containerH;
+
+    let imageW, imageH, offsetX, offsetY;
+
+    if (imgAspectRatio > containerAspectRatio) {
+        imageH = containerH;
+        imageW = imageH * imgAspectRatio;
+        let maxOffsetX = imageW - containerW;
+        offsetX = -(maxOffsetX * xPos);
+        offsetY = 0;
+    } else {
+        imageW = containerW;
+        imageH = imageW / imgAspectRatio;
+        let maxOffsetY = imageH - containerH;
+        offsetX = 0;
+        offsetY = -(maxOffsetY * yPos);
+    }
+
+    // Apply calculated styles to the img element
+    imgElement.style.width = Math.round(imageW) + 'px';
+    imgElement.style.height = Math.round(imageH) + 'px';
+    imgElement.style.left = Math.round(offsetX) + 'px';
+    imgElement.style.top = Math.round(offsetY) + 'px';
+
+    if (verbose === 1) {
+        let debugInfo = `
+      <div style="background:#333;">
+        index: ${index} | 
+        pos: ${xPos.toFixed(2)},${yPos.toFixed(2)} | 
+        ${cellFormat[index]} | 
+        ${Math.round(imageW)}x${Math.round(imageH)} → ${containerW}x${containerH}
+      </div>
+    `;
+        let yearElement = document.getElementById("year" + index);
+        if (yearElement) {
+            yearElement.innerHTML = debugInfo;
+        }
+    }
+}
+
+// Update positionImg to work with picture elements
+function positionImg(index, zoom) {
+    let imgID = 'img' + index;
+    let pictureElement = document.getElementById(imgID);
+    
+    if (!pictureElement) {
+        console.warn(`Picture element ${imgID} not found`);
+        return;
+    }
+    
+    // Get the actual img element inside the picture
+    let imgElement = pictureElement.querySelector('img');
+    if (!imgElement) {
+        console.warn(`Image inside picture ${imgID} not found`);
+        return;
+    }
+
+    // Find original image dimensions 
+    imgW[index] = imgElement.naturalWidth || imgElement.width;
+    imgH[index] = imgElement.naturalHeight || imgElement.height;
+
+    // Validate image dimensions
+    if (imgW[index] <= 0 || imgH[index] <= 0) {
+        console.warn(`Invalid image dimensions for index ${index}: ${imgW[index]}x${imgH[index]}`);
+        return;
+    }
+
+    // Store original dimensions in temporary variables
+    let tempW = imgW[index];
+    let tempH = imgH[index];
+
+    // Validate and clamp positioning values (0-1 range)
+    let xPos = parseFloat(visibleContent[index].xPos) || 0.5;
+    let yPos = parseFloat(visibleContent[index].yPos) || 0.5;
+
+    xPos = Math.max(0, Math.min(1, xPos));
+    yPos = Math.max(0, Math.min(1, yPos));
+
+    // Set base styles - apply to picture wrapper
+    pictureElement.style.position = 'absolute';
+    pictureElement.style.overflow = 'hidden';
+    
+    // Set img element styles
+    imgElement.style.position = 'absolute';
+    imgElement.style.opacity = 1;
+
+    // Calculate container dimensions based on cell format
+    let containerW, containerH;
+
+    if (cellFormat[index] === 'landscape') {
+        containerW = cellSize * 2 - borderWidth;
+        containerH = cellSize - borderWidth;
+    } else if (cellFormat[index] === 'portrait') {
+        containerW = cellSize - borderWidth;
+        containerH = cellSize * 2 - borderWidth;
+    } else {
+        containerW = cellSize - borderWidth;
+        containerH = cellSize - borderWidth;
+    }
+
+    // Validate container dimensions
+    if (containerW <= 0 || containerH <= 0) {
+        console.warn(`Invalid container dimensions: ${containerW}x${containerH}`);
+        return;
+    }
+
+    // Calculate image aspect ratio and container aspect ratio
+    let imgAspectRatio = tempW / tempH;
+    let containerAspectRatio = containerW / containerH;
+
+    let imageW, imageH, offsetX, offsetY;
+
+    if (imgAspectRatio > containerAspectRatio) {
+        imageH = containerH;
+        imageW = imageH * imgAspectRatio;
+        let maxOffsetX = imageW - containerW;
+        offsetX = -(maxOffsetX * xPos);
+        offsetY = 0;
+    } else {
+        imageW = containerW;
+        imageH = imageW / imgAspectRatio;
+        let maxOffsetY = imageH - containerH;
+        offsetX = 0;
+        offsetY = -(maxOffsetY * yPos);
+    }
+
+    // Apply calculated styles to the img element
+    imgElement.style.width = Math.round(imageW) + 'px';
+    imgElement.style.height = Math.round(imageH) + 'px';
+    imgElement.style.left = Math.round(offsetX) + 'px';
+    imgElement.style.top = Math.round(offsetY) + 'px';
+
+    if (verbose === 1) {
+        let debugInfo = `
+      <div style="background:#333;">
+        index: ${index} | 
+        pos: ${xPos.toFixed(2)},${yPos.toFixed(2)} | 
+        ${cellFormat[index]} | 
+        ${Math.round(imageW)}x${Math.round(imageH)} → ${containerW}x${containerH}
+      </div>
+    `;
+        let yearElement = document.getElementById("year" + index);
+        if (yearElement) {
+            yearElement.innerHTML = debugInfo;
+        }
+    }
+}
+
+// Update positionImg to work with picture elements
+function positionImg(index, zoom) {
+    let imgID = 'img' + index;
+    let pictureElement = document.getElementById(imgID);
+    
+    if (!pictureElement) {
+        console.warn(`Picture element ${imgID} not found`);
+        return;
+    }
+    
+    // Get the actual img element inside the picture
+    let imgElement = pictureElement.querySelector('img');
+    if (!imgElement) {
+        console.warn(`Image inside picture ${imgID} not found`);
+        return;
+    }
+
+    // Find original image dimensions 
+    imgW[index] = imgElement.naturalWidth || imgElement.width;
+    imgH[index] = imgElement.naturalHeight || imgElement.height;
+
+    // Validate image dimensions
+    if (imgW[index] <= 0 || imgH[index] <= 0) {
+        console.warn(`Invalid image dimensions for index ${index}: ${imgW[index]}x${imgH[index]}`);
+        return;
+    }
+
+    // Store original dimensions in temporary variables
+    let tempW = imgW[index];
+    let tempH = imgH[index];
+
+    // Validate and clamp positioning values (0-1 range)
+    let xPos = parseFloat(visibleContent[index].xPos) || 0.5;
+    let yPos = parseFloat(visibleContent[index].yPos) || 0.5;
+
+    xPos = Math.max(0, Math.min(1, xPos));
+    yPos = Math.max(0, Math.min(1, yPos));
+
+    // Set base styles - apply to picture wrapper
+    pictureElement.style.position = 'absolute';
+    pictureElement.style.overflow = 'hidden';
+    
+    // Set img element styles
+    imgElement.style.position = 'absolute';
+    imgElement.style.opacity = 1;
+
+    // Calculate container dimensions based on cell format
+    let containerW, containerH;
+
+    if (cellFormat[index] === 'landscape') {
+        containerW = cellSize * 2 - borderWidth;
+        containerH = cellSize - borderWidth;
+    } else if (cellFormat[index] === 'portrait') {
+        containerW = cellSize - borderWidth;
+        containerH = cellSize * 2 - borderWidth;
+    } else {
+        containerW = cellSize - borderWidth;
+        containerH = cellSize - borderWidth;
+    }
+
+    // Validate container dimensions
+    if (containerW <= 0 || containerH <= 0) {
+        console.warn(`Invalid container dimensions: ${containerW}x${containerH}`);
+        return;
+    }
+
+    // Calculate image aspect ratio and container aspect ratio
+    let imgAspectRatio = tempW / tempH;
+    let containerAspectRatio = containerW / containerH;
+
+    let imageW, imageH, offsetX, offsetY;
+
+    if (imgAspectRatio > containerAspectRatio) {
+        imageH = containerH;
+        imageW = imageH * imgAspectRatio;
+        let maxOffsetX = imageW - containerW;
+        offsetX = -(maxOffsetX * xPos);
+        offsetY = 0;
+    } else {
+        imageW = containerW;
+        imageH = imageW / imgAspectRatio;
+        let maxOffsetY = imageH - containerH;
+        offsetX = 0;
+        offsetY = -(maxOffsetY * yPos);
+    }
+
+    // Apply calculated styles to the img element
+    imgElement.style.width = Math.round(imageW) + 'px';
+    imgElement.style.height = Math.round(imageH) + 'px';
+    imgElement.style.left = Math.round(offsetX) + 'px';
+    imgElement.style.top = Math.round(offsetY) + 'px';
+
+    if (verbose === 1) {
+        let debugInfo = `
+      <div style="background:#333;">
+        index: ${index} | 
+        pos: ${xPos.toFixed(2)},${yPos.toFixed(2)} | 
+        ${cellFormat[index]} | 
+        ${Math.round(imageW)}x${Math.round(imageH)} → ${containerW}x${containerH}
+      </div>
+    `;
+        let yearElement = document.getElementById("year" + index);
+        if (yearElement) {
+            yearElement.innerHTML = debugInfo;
+        }
+    }
 }
 
 
