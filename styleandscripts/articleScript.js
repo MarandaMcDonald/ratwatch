@@ -20,7 +20,8 @@ let isMouseDevice = false; // set to true at first mouse click
 
 
 
-var colors = ["DarkRed","MediumVioletRed","OrangeRed","Gold","RebeccaPurple","DarkMagenta","DarkSlateBlue","SeaGreen","DarkGreen","DarkOliveGreen","Teal","SteelBlue","Navy","SaddleBrown","Maroon","SlateGrey","Black","DimGrey"];
+//var colors = ["DarkRed","MediumVioletRed","OrangeRed","Gold","RebeccaPurple","DarkMagenta","DarkSlateBlue","SeaGreen","DarkGreen","DarkOliveGreen","Teal","SteelBlue","Navy","SaddleBrown","Maroon","SlateGrey","Black","DimGrey"];
+var colors =  ["#5F5449","#9B6A6C","#B09398","#9EBC9E","#9AD1D4", "#DCC48E","#EAEFD3","#B3C0A4","#505168","#27233A"];
 
 const menuItems = [
     { text: "HOME", url: "https://www.tajweird.com/" },
