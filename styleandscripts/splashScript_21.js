@@ -1063,117 +1063,7 @@ function scrollFade(scrollPos, pScrollPos) {
 }
 
 ///////////////////////////////////////////////////////////////////--------------------------POSITION IMAGE INSIDE CONTAINER DIV - ROBUST VERSION
-function positionImg(index, zoom) {
-    let imgID = 'img' + index;
-    let imgElement = document.getElementById(imgID);
-
-    // Validate image element exists
-    if (!imgElement) {
-        console.warn(`Image element ${imgID} not found`);
-        return;
-    }
-
-    // Find original image dimensions 
-    imgW[index] = imgElement.naturalWidth || imgElement.width;
-    imgH[index] = imgElement.naturalHeight || imgElement.height;
-
-
-    // Validate image dimensions
-    if (imgW[index] <= 0 || imgH[index] <= 0) {
-        console.warn(`Invalid image dimensions for index ${index}: ${imgW[index]}x${imgH[index]}`);
-        return;
-    }
-
-    // Store original dimensions in temporary variables
-    let tempW = imgW[index];
-    let tempH = imgH[index];
-
-    // Validate and clamp positioning values (0-1 range)
-    let xPos = parseFloat(visibleContent[index].xPos) || 0.5; // Default to center if invalid
-    let yPos = parseFloat(visibleContent[index].yPos) || 0.5; // Default to center if invalid
-
-    xPos = Math.max(0, Math.min(1, xPos)); // Clamp between 0 and 1
-    yPos = Math.max(0, Math.min(1, yPos)); // Clamp between 0 and 1
-
-    // Set base styles common to all images
-    imgElement.style.position = 'absolute';
-    imgElement.style.opacity = 1;
-
-    // Calculate container dimensions based on cell format
-    let containerW, containerH;
-
-    if (cellFormat[index] === 'landscape') {
-        containerW = cellSize * 2 - borderWidth;
-        containerH = cellSize - borderWidth;
-    } else if (cellFormat[index] === 'portrait') {
-        containerW = cellSize - borderWidth;
-        containerH = cellSize * 2 - borderWidth;
-    } else { // square format
-        containerW = cellSize - borderWidth;
-        containerH = cellSize - borderWidth;
-    }
-
-    // Validate container dimensions
-    if (containerW <= 0 || containerH <= 0) {
-        console.warn(`Invalid container dimensions: ${containerW}x${containerH}`);
-        return;
-    }
-
-    // Calculate image aspect ratio and container aspect ratio
-    let imgAspectRatio = tempW / tempH;
-    let containerAspectRatio = containerW / containerH;
-
-    let imageW, imageH, offsetX, offsetY;
-
-    if (imgAspectRatio > containerAspectRatio) {
-        // Image is wider relative to container - scale to fill height, crop width
-        imageH = containerH;
-        imageW = imageH * imgAspectRatio;
-
-        // Calculate maximum possible offset (how much we can shift)
-        let maxOffsetX = imageW - containerW;
-        offsetX = -(maxOffsetX * xPos); // Apply positioning (negative because we're shifting left)
-        offsetY = 0; // No vertical offset needed
-
-    } else {
-        // Image is taller relative to container - scale to fill width, crop height
-        imageW = containerW;
-        imageH = imageW / imgAspectRatio;
-
-        // Calculate maximum possible offset (how much we can shift)
-        let maxOffsetY = imageH - containerH;
-        offsetX = 0; // No horizontal offset needed
-        offsetY = -(maxOffsetY * yPos); // Apply positioning (negative because we're shifting up)
-    }
-
-    // Apply calculated styles
-    imgElement.style.width = Math.round(imageW) + 'px';
-    imgElement.style.height = Math.round(imageH) + 'px';
-    imgElement.style.left = Math.round(offsetX) + 'px';
-    imgElement.style.top = Math.round(offsetY) + 'px';
-
-    // Debug output if verbose mode is on
-    if (verbose === 1) {
-        let debugInfo = `
-      <div style="background:#333;">
-        index: ${index} | 
-        pos: ${xPos.toFixed(2)},${yPos.toFixed(2)} | 
-        ${cellFormat[index]} | 
-        ${Math.round(imageW)}x${Math.round(imageH)} → ${containerW}x${containerH}
-      </div>
-    `;
-        let yearElement = document.getElementById("year" + index);
-        if (yearElement) {
-            yearElement.innerHTML = debugInfo;
-        }
-    }
-}
-
-
-
-///////////////////////////////////////////////////////////////////--------------------------ENHANCED LOAD IMAGE FUNCTION
-
-// FIXED VERSION - Replace your loadImg and positionImg functions with these
+// FIXED VERSION - Claud generated for responsive images, prob some bugs but seems to work
 
 function loadImg(index) {
     // Validate index
@@ -1234,7 +1124,6 @@ function loadImg(index) {
     
     // JPG fallback with srcset
     let img = document.createElement('img');
-    //img.srcset = `random/images/${baseFileName}.jpg 400w, random/images/${baseFileName}-600w.jpg 600w, random/images/${baseFileName}-800w.jpg 800w, random/images/${baseFileName}-1000w.jpg 1000w`;
     img.sizes = sizesAttr;
     img.src = `random/images/${imgFileName}`; // Ultimate fallback to original
     img.alt = visibleContent[index].title;
@@ -1275,8 +1164,9 @@ function loadImg(index) {
     picture.appendChild(webpSource);
     picture.appendChild(img);
     
-    // Copy positioning styles from old element to picture wrapper
-    picture.style.cssText = oldImgElement.style.cssText;
+    if (verbose === 1) {
+        console.log(`Copied styles to picture: ${oldStyles}`);
+    }
     
     // Replace the old img element with the new picture element
     parentDiv.replaceChild(picture, oldImgElement);
@@ -1324,18 +1214,10 @@ function positionImg(index, zoom) {
     xPos = Math.max(0, Math.min(1, xPos));
     yPos = Math.max(0, Math.min(1, yPos));
 
-    // Set base styles - picture wrapper stays positioned absolute
-    pictureElement.style.position = 'absolute';
-    pictureElement.style.left = '0px';
-    pictureElement.style.top = '0px';
-    pictureElement.style.width = '100%';
-    pictureElement.style.height = '100%';
-    pictureElement.style.overflow = 'hidden';
+    // The picture element should match the original img positioning
+    // It already has position:absolute, left, top from the copied styles
+    // We just need to make sure the img inside is positioned correctly
     
-    // Set img element styles
-    imgElement.style.position = 'absolute';
-    imgElement.style.opacity = 1;
-
     // Calculate container dimensions based on cell format
     let containerW, containerH;
 
@@ -1381,224 +1263,12 @@ function positionImg(index, zoom) {
     imgElement.style.height = Math.round(imageH) + 'px';
     imgElement.style.left = Math.round(offsetX) + 'px';
     imgElement.style.top = Math.round(offsetY) + 'px';
-
-    if (verbose === 1) {
-        let debugInfo = `
-      <div style="background:#333;">
-        index: ${index} | 
-        pos: ${xPos.toFixed(2)},${yPos.toFixed(2)} | 
-        ${cellFormat[index]} | 
-        ${Math.round(imageW)}x${Math.round(imageH)} → ${containerW}x${containerH}
-      </div>
-    `;
-        let yearElement = document.getElementById("year" + index);
-        if (yearElement) {
-            yearElement.innerHTML = debugInfo;
-        }
-    }
-}
-
-// Update positionImg to work with picture elements
-function positionImg(index, zoom) {
-    let imgID = 'img' + index;
-    let pictureElement = document.getElementById(imgID);
-    
-    if (!pictureElement) {
-        console.warn(`Picture element ${imgID} not found`);
-        return;
-    }
-    
-    // Get the actual img element inside the picture
-    let imgElement = pictureElement.querySelector('img');
-    if (!imgElement) {
-        console.warn(`Image inside picture ${imgID} not found`);
-        return;
-    }
-
-    // Find original image dimensions 
-    imgW[index] = imgElement.naturalWidth || imgElement.width;
-    imgH[index] = imgElement.naturalHeight || imgElement.height;
-
-    // Validate image dimensions
-    if (imgW[index] <= 0 || imgH[index] <= 0) {
-        console.warn(`Invalid image dimensions for index ${index}: ${imgW[index]}x${imgH[index]}`);
-        return;
-    }
-
-    // Store original dimensions in temporary variables
-    let tempW = imgW[index];
-    let tempH = imgH[index];
-
-    // Validate and clamp positioning values (0-1 range)
-    let xPos = parseFloat(visibleContent[index].xPos) || 0.5;
-    let yPos = parseFloat(visibleContent[index].yPos) || 0.5;
-
-    xPos = Math.max(0, Math.min(1, xPos));
-    yPos = Math.max(0, Math.min(1, yPos));
-
-    // Set base styles - apply to picture wrapper
-    pictureElement.style.position = 'absolute';
-    pictureElement.style.overflow = 'hidden';
-    
-    // Set img element styles
     imgElement.style.position = 'absolute';
-    imgElement.style.opacity = 1;
-
-    // Calculate container dimensions based on cell format
-    let containerW, containerH;
-
-    if (cellFormat[index] === 'landscape') {
-        containerW = cellSize * 2 - borderWidth;
-        containerH = cellSize - borderWidth;
-    } else if (cellFormat[index] === 'portrait') {
-        containerW = cellSize - borderWidth;
-        containerH = cellSize * 2 - borderWidth;
-    } else {
-        containerW = cellSize - borderWidth;
-        containerH = cellSize - borderWidth;
-    }
-
-    // Validate container dimensions
-    if (containerW <= 0 || containerH <= 0) {
-        console.warn(`Invalid container dimensions: ${containerW}x${containerH}`);
-        return;
-    }
-
-    // Calculate image aspect ratio and container aspect ratio
-    let imgAspectRatio = tempW / tempH;
-    let containerAspectRatio = containerW / containerH;
-
-    let imageW, imageH, offsetX, offsetY;
-
-    if (imgAspectRatio > containerAspectRatio) {
-        imageH = containerH;
-        imageW = imageH * imgAspectRatio;
-        let maxOffsetX = imageW - containerW;
-        offsetX = -(maxOffsetX * xPos);
-        offsetY = 0;
-    } else {
-        imageW = containerW;
-        imageH = imageW / imgAspectRatio;
-        let maxOffsetY = imageH - containerH;
-        offsetX = 0;
-        offsetY = -(maxOffsetY * yPos);
-    }
-
-    // Apply calculated styles to the img element
-    imgElement.style.width = Math.round(imageW) + 'px';
-    imgElement.style.height = Math.round(imageH) + 'px';
-    imgElement.style.left = Math.round(offsetX) + 'px';
-    imgElement.style.top = Math.round(offsetY) + 'px';
+    imgElement.style.opacity = 1; // Make sure it's visible!
 
     if (verbose === 1) {
-        let debugInfo = `
-      <div style="background:#333;">
-        index: ${index} | 
-        pos: ${xPos.toFixed(2)},${yPos.toFixed(2)} | 
-        ${cellFormat[index]} | 
-        ${Math.round(imageW)}x${Math.round(imageH)} → ${containerW}x${containerH}
-      </div>
-    `;
-        let yearElement = document.getElementById("year" + index);
-        if (yearElement) {
-            yearElement.innerHTML = debugInfo;
-        }
-    }
-}
-
-// Update positionImg to work with picture elements
-function positionImg(index, zoom) {
-    let imgID = 'img' + index;
-    let pictureElement = document.getElementById(imgID);
-    
-    if (!pictureElement) {
-        console.warn(`Picture element ${imgID} not found`);
-        return;
-    }
-    
-    // Get the actual img element inside the picture
-    let imgElement = pictureElement.querySelector('img');
-    if (!imgElement) {
-        console.warn(`Image inside picture ${imgID} not found`);
-        return;
-    }
-
-    // Find original image dimensions 
-    imgW[index] = imgElement.naturalWidth || imgElement.width;
-    imgH[index] = imgElement.naturalHeight || imgElement.height;
-
-    // Validate image dimensions
-    if (imgW[index] <= 0 || imgH[index] <= 0) {
-        console.warn(`Invalid image dimensions for index ${index}: ${imgW[index]}x${imgH[index]}`);
-        return;
-    }
-
-    // Store original dimensions in temporary variables
-    let tempW = imgW[index];
-    let tempH = imgH[index];
-
-    // Validate and clamp positioning values (0-1 range)
-    let xPos = parseFloat(visibleContent[index].xPos) || 0.5;
-    let yPos = parseFloat(visibleContent[index].yPos) || 0.5;
-
-    xPos = Math.max(0, Math.min(1, xPos));
-    yPos = Math.max(0, Math.min(1, yPos));
-
-    // Set base styles - apply to picture wrapper
-    pictureElement.style.position = 'absolute';
-    pictureElement.style.overflow = 'hidden';
-    
-    // Set img element styles
-    imgElement.style.position = 'absolute';
-    imgElement.style.opacity = 1;
-
-    // Calculate container dimensions based on cell format
-    let containerW, containerH;
-
-    if (cellFormat[index] === 'landscape') {
-        containerW = cellSize * 2 - borderWidth;
-        containerH = cellSize - borderWidth;
-    } else if (cellFormat[index] === 'portrait') {
-        containerW = cellSize - borderWidth;
-        containerH = cellSize * 2 - borderWidth;
-    } else {
-        containerW = cellSize - borderWidth;
-        containerH = cellSize - borderWidth;
-    }
-
-    // Validate container dimensions
-    if (containerW <= 0 || containerH <= 0) {
-        console.warn(`Invalid container dimensions: ${containerW}x${containerH}`);
-        return;
-    }
-
-    // Calculate image aspect ratio and container aspect ratio
-    let imgAspectRatio = tempW / tempH;
-    let containerAspectRatio = containerW / containerH;
-
-    let imageW, imageH, offsetX, offsetY;
-
-    if (imgAspectRatio > containerAspectRatio) {
-        imageH = containerH;
-        imageW = imageH * imgAspectRatio;
-        let maxOffsetX = imageW - containerW;
-        offsetX = -(maxOffsetX * xPos);
-        offsetY = 0;
-    } else {
-        imageW = containerW;
-        imageH = imageW / imgAspectRatio;
-        let maxOffsetY = imageH - containerH;
-        offsetX = 0;
-        offsetY = -(maxOffsetY * yPos);
-    }
-
-    // Apply calculated styles to the img element
-    imgElement.style.width = Math.round(imageW) + 'px';
-    imgElement.style.height = Math.round(imageH) + 'px';
-    imgElement.style.left = Math.round(offsetX) + 'px';
-    imgElement.style.top = Math.round(offsetY) + 'px';
-
-    if (verbose === 1) {
+        console.log(`Positioned image ${index}: ${Math.round(imageW)}x${Math.round(imageH)} at ${Math.round(offsetX)},${Math.round(offsetY)}`);
+        
         let debugInfo = `
       <div style="background:#333;">
         index: ${index} | 
