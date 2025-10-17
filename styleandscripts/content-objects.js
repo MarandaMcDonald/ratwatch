@@ -204,8 +204,8 @@ const contentObject = [
   
   {
     "image": "guillotine.jpg",
-    "title": "ChopChop!",
-    "url": "https://tajweird.com/random/images/guillotine.jpg",
+    "title": "Makerspace Birthday!",
+    "url": "https://tajweird.com/NodeBirthday",
     "type": "Creation",
     "year": "July 2024",
     "tags": [
@@ -237,7 +237,9 @@ const contentObject = [
     "type": "Creation",
     "year": "November 2021",
     "tags": [
-      "Metalwork"
+      "Metalwork",
+      "Article",
+      "Events"
     ],
     "xPos": 0.3,
     "yPos": 0.3
