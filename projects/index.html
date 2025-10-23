@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <base href="/" />
+  <title>Projects — Rat Watch</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Toilet Bowl Race, Mayor’s Parade, Tall Bikes, Jousting." />
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root{ --pad: clamp(16px,4vw,40px); --bg:#0f1013; --fg:#e9ebef; --muted:#a1a7af; --outline:#2a2b31; --badge:#2c3037cc;}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui}
+    header,main{padding:24px var(--pad)}
+    h1{font-family:"Bebas Neue"; font-size:clamp(36px,8vw,72px); letter-spacing:.5px; margin:.2rem 0}
+    nav a{color:var(--fg); text-decoration:none; margin-right:10px; border:1px solid var(--outline); border-radius:999px; padding:.45rem .85rem; background:#17181c}
+    nav a:hover{background:#20222a}
+    .tabs{display:flex; gap:10px; flex-wrap:wrap; margin:12px 0 18px}
+    .tab{padding:.5rem .85rem; border:1px solid var(--outline); border-radius:999px; background:#17181c; cursor:pointer}
+    .tab[aria-selected="true"]{background:#20222a}
+    .masonry{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); grid-auto-rows:8px; gap:14px; align-items:start}
+    .tile{position:relative; background:#17181e; border:1px solid var(--outline); border-radius:12px; overflow:hidden}
+    .tile img{display:block; width:100%; height:auto; object-fit:cover}
+    .banner{position:absolute; left:10px; top:10px; background:var(--badge); color:#fff; padding:.4rem .6rem; border-radius:8px; font-weight:700}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Projects</h1>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/members/">Members</a>
+      <a href="/mission/">Mission</a>
+      <a href="/get_involved/">Get Involved</a>
+      <a href="/contact/">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="tabs" role="tablist" aria-label="Project categories">
+      <button class="tab" role="tab" aria-selected="true" data-cat="toilet">Toilet Bowl Race</button>
+      <button class="tab" role="tab" aria-selected="false" data-cat="mayor">Mayor’s Parade</button>
+      <button class="tab" role="tab" aria-selected="false" data-cat="tall">Tall Bikes</button>
+      <button class="tab" role="tab" aria-selected="false" data-cat="joust">Jousting</button>
+    </div>
+    <section id="grid" class="masonry" aria-live="polite"></section>
+  </main>
+
+  <script>
+    const BASE="/images/projects/";
+    const sets = {
+      toilet: [
+        // sample: {file:"step_here.jpeg", label:"Step Here"}
+      ],
+      mayor: [
+        // …
+      ],
+      tall: [
+        {file:"full_bike.jpeg", label:"Tallbike Assembled"},
+        {file:"purple.jpeg", label:"Purple Finish"},
+        {file:"ride_bike.jpeg", label:"First Ride"}
+      ],
+      joust: [
+        // …
+      ],
+    };
+
+    const grid=document.getElementById('grid');
+    const rowH=8, gap=14;
+
+    function render(cat){
+      grid.innerHTML="";
+      const arr=sets[cat]||[];
+      arr.forEach(it=>{
+        const t=document.createElement('article');
+        t.className='tile';
+        const img=document.createElement('img');
+        img.src=BASE+it.file; img.alt=it.label||"";
+        const b=document.createElement('div');
+        b.className='banner'; b.textContent=it.label||"";
+        t.append(img,b);
+        img.addEventListener('load', ()=>{
+          const h=t.getBoundingClientRect().height;
+          t.style.gridRowEnd=`span ${Math.ceil((h+gap)/rowH)}`;
+        });
+        grid.appendChild(t);
+      });
+    }
+
+    document.querySelectorAll('.tab').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected','false'));
+        btn.setAttribute('aria-selected','true');
+        render(btn.dataset.cat);
+      });
+    });
+
+    render('tall'); // default
+    window.addEventListener('resize', ()=>{
+      document.querySelectorAll('.masonry .tile').forEach(t=>{
+        const h=t.getBoundingClientRect().height;
+        t.style.gridRowEnd=`span ${Math.ceil((h+gap)/rowH)}`;
+      });
+    });
+  </script>
+</body>
+</html>

@@ -2,80 +2,56 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Contact — Maranda McDonald</title>
+  <base href="/" />
+  <title>Contact — Rat Watch</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Contact Maranda McDonald — chemical biology researcher at Johns Hopkins." />
-
-  <!-- Social previews (optional) -->
-  <meta property="og:title" content="Contact — Maranda McDonald" />
-  <meta property="og:description" content="Get in touch by email or Instagram." />
-  <!-- <meta property="og:image" content="https://www.marandamcdonald.com/images/contact-preview.jpg" /> -->
-
-  <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
-  <link rel="stylesheet" href="../styleandscripts/articleStyle.css" />
-
-  <script defer src="../styleandscripts/articleScript.js"></script>
-
+  <meta name="description" content="Get in touch with Rat Watch." />
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    /* Minimal safety styles if your CSS hasn't loaded yet */
-    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; color:#111; background:#fff; }
-    #menu-wrapper { border-bottom:1px solid #eee; }
-    #menu { max-width:1100px; margin:0 auto; padding:0.75rem 1rem; display:flex; gap:1rem; align-items:center; }
-    #menu a { text-decoration:none; color:#111; padding:.35rem .6rem; border-radius:999px; }
-    #menu a:hover { background:#f3f3f3; }
-    #content-wrapper { max-width:1100px; margin:0 auto; padding:2rem 1rem 4rem; }
-    #banner { font-size: clamp(28px, 5vw, 48px); font-weight:600; letter-spacing:.3px; margin-bottom:.25rem; }
-    .subtle { color:#666; margin-bottom:2rem; }
-    #article { line-height:1.6; }
-    .text-block { margin:1.25rem 0 1.5rem; }
-    h2 { font-size:1.4rem; margin:2rem 0 .25rem; }
-    .contact-list { list-style:none; padding:0; margin:0; }
-    .contact-list li { margin:.6rem 0; }
-    .contact-label { display:block; font-weight:600; margin-bottom:.15rem; }
-    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+    :root{ --pad: clamp(16px,4vw,40px); --bg:#0f1013; --fg:#e9ebef; --muted:#a1a7af; --outline:#2a2b31;}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui}
+    header,main{padding:24px var(--pad)}
+    h1{font-family:"Bebas Neue"; font-size:clamp(36px,8vw,72px); letter-spacing:.5px; margin:.2rem 0}
+    nav a{color:var(--fg); text-decoration:none; margin-right:10px; border:1px solid var(--outline); border-radius:999px; padding:.45rem .85rem; background:#17181c}
+    nav a:hover{background:#20222a}
+    .contact{max-width:700px; border:1px solid var(--outline); border-radius:12px; padding:18px; background:#17181e}
+    .row{margin:.6rem 0}
+    a.link{color:#9fd3c7; text-decoration:none}
   </style>
 </head>
-
-<body onload="pageLoad()" onresize="pageResize()">
-  <a class="sr-only" href="#main">Skip to content</a>
-
-  <div id="menu-wrapper">
-    <nav id="menu" aria-label="Primary">
-      <a href="/" id="home">HOME</a>
-      <a href="/about/" id="about">ABOUT</a>
-      <a href="/contact/" id="contact" aria-current="page">CONTACT</a>
+<body>
+  <header>
+    <h1>Contact</h1>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/members/">Members</a>
+      <a href="/mission/">Mission</a>
+      <a href="/projects/">Projects</a>
+      <a href="/get_involved/">Get Involved</a>
     </nav>
-  </div>
+  </header>
 
-  <main id="content-wrapper" role="main" id="main">
-    <div id="banner">Maranda McDonald</div>
-    <div class="subtle">Get in touch</div>
-
-    <div id="article">
-      <section class="text-block" aria-labelledby="contact-heading">
-        <h2 id="contact-heading">Contact</h2>
-        <ul class="contact-list">
-          <li>
-            <span class="contact-label">Email</span>
-            <a href="mailto:marandascience@gmail.com?subject=Hello%20from%20your%20website">marandascience@gmail.com</a>
-          </li>
-          <li>
-            <span class="contact-label">Instagram</span>
-            <a href="https://www.instagram.com/maranda__mac/" rel="me noopener">instagram.com/maranda__mac</a>
-          </li>
-        </ul>
-      </section>
-
-      <!-- Optional: simple note or office-hours block -->
-      <!--
-      <section class="text-block">
-        <h2>Notes</h2>
-        <p>I’m quickest by email. For collaboration inquiries, include a one-liner on the project and timelines.</p>
-      </section>
-      -->
+  <main>
+    <div class="contact">
+      <div class="row"><strong>Email</strong><br><a class="link" href="mailto:ratwatchbalt@proton.me">ratwatchbalt@proton.me</a></div>
+      <div class="row"><strong>Instagram</strong><br><a class="link" href="https://www.instagram.com/ratwatchbalt/">instagram.com/ratwatchbalt</a></div>
     </div>
   </main>
 
-  <div id="eof"></div>
+  <!-- optional debug (remove when satisfied) -->
+  <script>
+  (async () => {
+    const links = ["/", "/mission/", "/members/", "/projects/", "/get_involved/", "/contact/"];
+    for (const href of links) {
+      try {
+        const res = await fetch(href, { method: "HEAD", cache: "no-store" });
+        console.log(href, res.status, res.ok ? "OK" : "MISSING");
+      } catch (e) {
+        console.log(href, "FETCH ERR", e);
+      }
+    }
+  })();
+  </script>
 </body>
 </html>

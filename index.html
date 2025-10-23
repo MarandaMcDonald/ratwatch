@@ -1,225 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <base href="/" />
   <meta charset="utf-8" />
   <title>Rat Watch</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Baltimore based freak bike collective." />
-
-
+  <meta name="description" content="Rat Watch — Baltimore freak-bike collective. Builds, rides, and community projects." />
   <meta property="og:title" content="Rat Watch" />
-  <meta property="og:description" content="Chemical biology, PAR research, and projects." />
-
-
+  <meta property="og:description" content="Tall bikes, jousting, parades, and weekly builds in Baltimore." />
   <link rel="canonical" href="https://www.ratwatch.org/" />
-  <link rel="icon" type="image/x-icon" href="images/favicon.svg" />
+  <base href="/" />
 
-  <link rel="stylesheet" href="styleandscripts/splashStyle_21.css" />
-  <script defer src="styleandscripts/content-objects.js"></script>
-  <script defer src="styleandscripts/splashScript_21.js"></script>
-  <script>var verbose = 0;</script>
+  <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 
-  <!-- Minimal fallback styles (safe even if your CSS hasn’t loaded yet) -->
   <style>
-    :root { --pad: 5vw; }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; background:#f7f7f7; color:#111; }
-    header { padding: 10vh var(--pad) 4vh; text-align:center; }
-    h1 { margin:0 0 .35em; font-size: clamp(32px,6vw,56px); letter-spacing:.3px; }
-    .tagline { color:#555; font-size: clamp(16px,2.5vw,20px); }
-    nav { display:flex; justify-content:center; gap:1rem; margin: 2rem 0 0; flex-wrap:wrap; }
-    .menu-button { text-decoration:none; padding:.65rem 1rem; border-radius:999px; border:1px solid #ddd; background:#fff; color:#111; }
-    .menu-button:hover { background:#f0f0f0; }
-    main { padding: 0 var(--pad) 8vh; }
-    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
-
-    /* Gallery */
-    #projects { padding: 3rem 0; }
-    #projects[hidden] { display:none !important; }
-    #projects h2 { margin:0 0 1rem; font-size:1.25rem; color:#333; }
-    .gallery-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; }
-    .thumb { position:relative; cursor:pointer; overflow:hidden; border-radius:10px; background:#eee; border:1px solid #e6e6e6; }
-    .thumb img { width:100%; height:160px; object-fit:cover; display:block; transition:transform .25s; }
-    .thumb:hover img { transform:scale(1.03); }
-    .thumb .cap { position:absolute; left:0; right:0; bottom:0; background:linear-gradient(transparent, rgba(0,0,0,.55)); color:#fff; font-size:.85rem; padding:.45rem .6rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-
-    /* Lightbox */
-    .lightbox { position:fixed; inset:0; background:rgba(0,0,0,.85); display:grid; place-items:center; z-index:9999; }
-    .lightbox[hidden] { display:none !important; }
-    .lightbox-inner { display:flex; flex-direction:column; align-items:center; gap:.5rem; max-width:92vw; }
-    .lightbox img { max-width:92vw; max-height:80vh; border-radius:12px; background:#111; }
-    .lightbox-caption { color:#fff; text-align:center; max-width:92vw; }
-    .lb-btn { position:fixed; background:transparent; border:0; color:#fff; font-size:32px; cursor:pointer; line-height:1; padding:.25rem .5rem; }
-    .lightbox-close { top:16px; right:18px; }
-    .lightbox-prev { top:50%; left:16px; transform:translateY(-50%); }
-    .lightbox-next { top:50%; right:16px; transform:translateY(-50%); }
-    @media (hover:hover) {
-      .lb-btn:hover { color:#ddd; }
+    :root{
+      --pad: clamp(16px,4vw,40px);
+      --gap: 14px;
+      --bg: #0f1013;
+      --fg: #e9ebef;
+      --muted:#a1a7af;
+      --card:#17181e;
+      --outline:#2a2b31;
+      --badge:#2c3037cc;
+      --badge2:#418a7bcc;
+      --accent:#9fd3c7;
     }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
 
-    /* Optional intro */
-    .intro { max-width:900px; margin: 0 auto 2rem; line-height:1.6; color:#222; }
+    header{position:relative}
+    .hero{
+      position:relative; overflow:hidden;
+      height:min(68vh,720px); background:#000;
+      border-bottom:1px solid var(--outline);
+    }
+    .hero video{
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.9;
+      filter:contrast(1.05) saturate(1.05);
+    }
+    .hero-overlay{
+      position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.65));
+      display:grid; place-items:center; text-align:center; padding:0 var(--pad);
+    }
+    h1{
+      margin:0; font-family:"Bebas Neue",system-ui; letter-spacing:.5px;
+      font-size:clamp(40px,10vw,110px);
+    }
+    .tagline{margin:.2rem 0 1rem; color:var(--muted); font-weight:600}
+    nav{display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
+    .btn{
+      padding:.6rem .95rem; border-radius:999px; border:1px solid var(--outline); background:#17181c; color:var(--fg);
+      text-decoration:none; transition:background .15s, transform .05s;
+    }
+    .btn:hover{background:#20222a}
+    .btn:active{transform:translateY(1px)}
+
+    main{padding: 24px var(--pad) 80px}
+    .intro{max-width:900px; margin:0 auto 22px; color:var(--muted); text-align:center; line-height:1.6}
+
+    /* Masonry grid */
+    .masonry{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); grid-auto-rows:8px; gap:var(--gap); align-items:start}
+    .tile{position:relative; background:var(--card); border:1px solid var(--outline); border-radius:12px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.25)}
+    .tile img{display:block; width:100%; height:auto; object-fit:cover; filter:saturate(1.03); transition:transform .25s}
+    .tile:hover img{transform:scale(1.03)}
+    .banner{position:absolute; left:10px; top:10px; max-width:86%; background:var(--badge); color:#f2f2f2;
+      padding:.45rem .6rem; border-radius:8px; font-weight:700; letter-spacing:.2px; box-shadow:0 3px 10px rgba(0,0,0,.25); backdrop-filter: blur(2px);}
+    .banner small{display:block; margin-top:.35rem; font-weight:500; opacity:.9}
+    .tag{position:absolute; right:10px; bottom:10px; background:var(--badge2); color:#fff; padding:.35rem .55rem; border-radius:8px; font-size:.85rem; box-shadow:0 3px 10px rgba(0,0,0,.25); backdrop-filter: blur(2px);}
+
+    footer{padding:40px var(--pad); color:var(--muted); border-top:1px solid var(--outline)}
+    footer a{color:var(--accent); text-decoration:none}
   </style>
 </head>
-
 <body>
-  <a class="sr-only" href="#content">Skip to content</a>
-
-  <!-- HERO / HEADER -->
-  <header id="splash" role="banner">
-    <h1 id="banner">Rat Watch</h1>
-    <p id="underline" class="tagline">Bicycle Club</p>
-
-    <nav aria-label="Primary">
-      <a class="menu-button" href="#projects" id="article" data-open-gallery>PROJECTS</a>
-      <a class="menu-button" href="/about/" id="about">ABOUT</a>
-      <a class="menu-button" href="/contact/" id="contact">CONTACT</a>
-    </nav>
+  <header>
+    <div class="hero">
+      <video autoplay muted loop playsinline>
+        <source src="/images/hero.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-overlay">
+        <div>
+          <h1>Rat Watch</h1>
+          <p class="tagline">Baltimore freak-bike collective</p>
+          <nav aria-label="Primary">
+            <a class="btn" href="/projects/">Projects</a>
+            <a class="btn" href="/members/">Members</a>
+            <a class="btn" href="/mission/">Mission</a>
+            <a class="btn" href="/get_involved/">Get Involved</a>
+            <a class="btn" href="/contact/">Contact</a>
+          </nav>
+        </div>
+      </div>
+    </div>
   </header>
 
-  <main id="content" role="main">
-    <!-- Optional short intro -->
-    <section class="intro" aria-labelledby="intro-heading">
-      <h2 id="intro-heading" class="sr-only">Introduction</h2>
-      <p>
-        Welcome! We are Rat Watch, a baltimore central collective of freak bike builders and
-        adventurers.
-      </p>
-    </section>
-
-    <!-- PROJECTS GALLERY (initially hidden; revealed when clicking Projects) -->
-    <section id="projects" aria-labelledby="projects-heading" hidden>
-      <h2 id="projects-heading">Projects</h2>
-      <div id="project-gallery" class="gallery-grid"></div>
-
-      <!-- Lightbox -->
-      <div id="lightbox" class="lightbox" hidden aria-modal="true" role="dialog" aria-label="Image viewer">
-        <button class="lb-btn lightbox-close" aria-label="Close gallery">&times;</button>
-        <button class="lb-btn lightbox-prev" aria-label="Previous image">&#10094;</button>
-        <div class="lightbox-inner">
-          <img id="lightbox-img" alt="" />
-          <div id="lightbox-caption" class="lightbox-caption"></div>
-        </div>
-        <button class="lb-btn lightbox-next" aria-label="Next image">&#10095;</button>
-      </div>
-    </section>
-
-    <div id="menuTop"></div>
-    <div id="menu"></div>
-    <div id="randomMessage" aria-live="polite"></div>
-    <div id="menuBottom"></div>
-    <div id="fadeScrollContainer">
-      <div id="videoContainer"></div>
-    </div>
+  <main>
+    <p class="intro">Build nights, tallbike rides, parade chaos, and community tinkering. Here are some recent moments.</p>
+    <section id="gallery" class="masonry" aria-label="Collage"></section>
   </main>
 
-  <div id="debug" hidden></div>
-
+  <footer>
+    © <span id="y"></span> Rat Watch · Baltimore ·
+    <a href="mailto:ratwatchbalt@proton.me">ratwatchbalt@proton.me</a> ·
+    <a href="https://www.instagram.com/ratwatchbalt/">@ratwatchbalt</a>
+  </footer>
 
   <script>
-    // Where to put your files:  /images/projects/
-    // 1) Upload your images into /images/projects/
-    // 2) List them below as { file: "name.ext", caption: "Optional caption" }
-    const PROJECTS = [
-      // ---------- ADD IMAGES HERE ----------
-       { file: "tallbike_final.jpeg", caption: "The Mar-Machine" },
-      // { file: "spray-bike-frame.webp",    caption: "Custom Spray.bike frame" },
-      // { file: "parmap-figure.jpg",        caption: "PARmap proteomics figure" },
-      // { file: "laser-panel.png",          caption: "Laser-cut panel" },
-      // { file: "leatherwork-pouch.png",    caption: "Leatherwork tool pouch" },
-      // ------------------------------------------
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Image list (files expected under /images/projects/)
+    const BASE = "/images/projects/";
+    const items = [
+      {file:"more_welding.jpg",     title:"More Welding",       sub:"Rooftop fabrication",                 tag:"Build"},
+      {file:"start_jamis.jpeg",     title:"Start — Jamis",      sub:"Donor stripped",                      tag:"Prep"},
+      {file:"strip_jamis.jpeg",     title:"Paint Off",          sub:"Down to metal",                       tag:"Prep"},
+      {file:"clean_bikes.jpeg",     title:"Clean Up",           sub:"Parts wash",                          tag:"Shop"},
+      {file:"weld_frame.jpeg",      title:"Main Weld-Up",       sub:"Jig + beads",                         tag:"Build"},
+      {file:"weld_headtube.jpeg",   title:"Head Tube",          sub:"Alignment passes",                    tag:"Build"},
+      {file:"layout.jpeg",          title:"Layout",             sub:"Mock + measure",                      tag:"Planning"},
+      {file:"weld_maranda.jpeg",    title:"Maranda at Torch",   sub:"Practice → final",                    tag:"Build"},
+      {file:"full_bike.jpeg",       title:"Tallbike Assembled", sub:"First mockup",                        tag:"Milestone"},
+      {file:"ride_bike.jpeg",       title:"First Ride",         sub:"Shakedown",                           tag:"Ride"},
+      {file:"primer.jpeg",          title:"Primer",             sub:"Surface prep",                        tag:"Finish"},
+      {file:"purple.jpeg",          title:"Purple",             sub:"Color coat",                          tag:"Finish"},
+      {file:"step_here.jpeg",       title:"Step Here",          sub:"Decal details",                       tag:"Details"}
     ];
-    const BASE_PATH = "images/projects/";
 
-    // Elements
-    const projectsBtn = document.querySelector('[data-open-gallery]');
-    const section = document.getElementById('projects');
-    const grid = document.getElementById('project-gallery');
-    const lightbox = document.getElementById('lightbox');
-    const lbImg = document.getElementById('lightbox-img');
-    const lbCap = document.getElementById('lightbox-caption');
-    const lbClose = document.querySelector('.lightbox-close');
-    const lbPrev = document.querySelector('.lightbox-prev');
-    const lbNext = document.querySelector('.lightbox-next');
+    const grid = document.getElementById("gallery");
+    const rowH = 8, gap = 14;
 
-    let currentIndex = 0;
+    // Attach WebP srcset only if a representative size exists; always keep a base image
+    function attachResponsiveIfAvailable(img, baseNoExt){
+      const test = new Image();
+      test.onload = () => {
+        img.srcset = [
+          `${BASE}${baseNoExt}-400w.webp 400w`,
+          `${BASE}${baseNoExt}-600w.webp 600w`,
+          `${BASE}${baseNoExt}-800w.webp 800w`,
+          `${BASE}${baseNoExt}-1000w.webp 1000w`
+        ].join(", ");
+        img.sizes = "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw";
+      };
+      test.onerror = () => { /* leave base src only */ };
+      test.src = `${BASE}${baseNoExt}-800w.webp?${Date.now()}`;
+    }
 
-    function buildGallery() {
-      if (!grid) return;
-      grid.innerHTML = "";
-      PROJECTS.forEach((p, i) => {
-        const wrap = document.createElement('div');
-        wrap.className = 'thumb';
-        wrap.setAttribute('role', 'button');
-        wrap.setAttribute('tabindex', '0');
-        wrap.setAttribute('aria-label', p.caption ? `Open image: ${p.caption}` : 'Open image');
+    function makeTile(item){
+      const el = document.createElement("article");
+      el.className = "tile";
 
-        const img = document.createElement('img');
-        img.loading = 'lazy';
-        img.alt = p.caption || '';
-        img.src = BASE_PATH + p.file;
+      const img = document.createElement("img");
+      img.loading = "lazy";
+      img.alt = item.title;
 
-        const cap = document.createElement('div');
-        cap.className = 'cap';
-        cap.textContent = p.caption || p.file;
+      const original = BASE + item.file;
+      const baseNoExt = item.file.replace(/\.(jpe?g|png|webp)$/i,'');
+      img.src = original;
 
-        wrap.appendChild(img);
-        wrap.appendChild(cap);
-        wrap.addEventListener('click', () => openLightbox(i));
-        wrap.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(i); }
-        });
-
-        grid.appendChild(wrap);
+      // Fallback to .jpg/.jpeg if original fails
+      img.addEventListener("error", () => {
+        const j = `${BASE}${baseNoExt}.jpg`;
+        const jj = `${BASE}${baseNoExt}.jpeg`;
+        if (!img.dataset.f1){ img.dataset.f1 = 1; img.src = j; return; }
+        if (!img.dataset.f2){ img.dataset.f2 = 1; img.src = jj; return; }
       });
+
+      // Add responsive WebP set only if present
+      attachResponsiveIfAvailable(img, baseNoExt);
+
+      const banner = document.createElement("div");
+      banner.className = "banner";
+      banner.innerHTML = `${item.title}<small>${item.sub}</small>`;
+
+      const tag = document.createElement("div");
+      tag.className = "tag";
+      tag.textContent = item.tag;
+
+      el.append(img, banner, tag);
+
+      img.addEventListener("load", () => {
+        const h = el.getBoundingClientRect().height;
+        el.style.gridRowEnd = `span ${Math.ceil((h + gap) / rowH)}`;
+      });
+
+      return el;
     }
 
-    function openSection() {
-      if (section.hasAttribute('hidden')) section.removeAttribute('hidden');
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    items.forEach(it => grid.appendChild(makeTile(it)));
 
-    function openLightbox(i) {
-      if (!PROJECTS.length) return;
-      currentIndex = i;
-      showCurrent();
-      lightbox.removeAttribute('hidden');
-    }
-
-    function showCurrent() {
-      const p = PROJECTS[currentIndex];
-      if (!p) return;
-      lbImg.src = BASE_PATH + p.file + '?v=' + Date.now(); // cache-bust on updates
-      lbImg.alt = p.caption || '';
-      lbCap.textContent = p.caption || '';
-    }
-
-    function closeLightbox() { lightbox.setAttribute('hidden', ''); }
-    function prev() { currentIndex = (currentIndex - 1 + PROJECTS.length) % PROJECTS.length; showCurrent(); }
-    function next() { currentIndex = (currentIndex + 1) % PROJECTS.length; showCurrent(); }
-
-    // Wire up
-    projectsBtn && projectsBtn.addEventListener('click', (e) => {
-      if (projectsBtn.getAttribute('href') === '#projects') e.preventDefault();
-      if (!PROJECTS.length) {
-        // Helpful message if array is still empty
-        grid.innerHTML = '<p style="grid-column:1/-1;color:#555">Add images to the PROJECTS array in the HTML to populate this gallery.</p>';
-      } else {
-        buildGallery();
-      }
-      openSection();
+    let raf;
+    window.addEventListener("resize", () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        document.querySelectorAll(".masonry .tile").forEach(el => {
+          const h = el.getBoundingClientRect().height;
+          el.style.gridRowEnd = `span ${Math.ceil((h + gap) / rowH)}`;
+        });
+      });
     });
-
-    lbClose && lbClose.addEventListener('click', closeLightbox);
-    lbPrev && lbPrev.addEventListener('click', prev);
-    lbNext && lbNext.addEventListener('click', next);
-
-    // Close on ESC / backdrop click
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
-    lightbox && lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-
-    // Optional: auto-build thumbnails on page load (unhide section below if you want it always visible)
-    // buildGallery(); section.removeAttribute('hidden');
   </script>
 </body>
 </html>
