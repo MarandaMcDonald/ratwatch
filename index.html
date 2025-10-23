@@ -1,66 +1,90 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Maranda Mcdonald</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0"> 
+  <meta charset="utf-8" />
+  <title>Maranda McDonald</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Maranda McDonald — chemical biology researcher and avid cyclist. Projects, about, and contact." />
 
+  <!-- Open Graph / Twitter (nice link previews) -->
+  <meta property="og:title" content="Maranda McDonald" />
+  <meta property="og:description" content="Chemical biology, PAR research, and projects." />
+  <!-- If you add a real image later, update this and make sure it's HTTPS and absolute -->
+  <!-- <meta property="og:image" content="https://www.marandamcdonald.com/images/preview.jpg" /> -->
+  <meta name="twitter:card" content="summary" />
 
-    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="styleandscripts/splashStyle_21.css">
+  <!-- Canonical -->
+  <link rel="canonical" href="https://www.marandamcdonald.com/" />
 
-    <script src="styleandscripts/content-objects.js"></script>
-    <script src="styleandscripts/splashScript_21.js"></script>
-    <script type="text/javascript">verbose = 0;</script>
+  <!-- Favicon (safe to keep if you have it; remove this line if not) -->
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
 
+  <!-- CSS -->
+  <link rel="stylesheet" href="styleandscripts/splashStyle_21.css" />
+
+  <!-- JS (defer so it doesn’t block page render) -->
+  <script defer src="styleandscripts/content-objects.js"></script>
+  <script defer src="styleandscripts/splashScript_21.js"></script>
+  <script>var verbose = 0;</script>
+
+  <style>
+    /* Minimal fallback styles if your CSS hasn’t loaded yet */
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:#f7f7f7; color:#111; }
+    header { padding: 10vh 5vw 4vh; text-align:center; }
+    h1 { margin:0 0 .25em; font-size: clamp(32px, 6vw, 56px); letter-spacing: .5px; }
+    .tagline { color:#555; font-size: clamp(16px, 2.5vw, 20px); }
+    nav { display:flex; justify-content:center; gap:1rem; margin: 2rem 0 0; flex-wrap:wrap; }
+    .menu-button { text-decoration:none; padding:.6rem 1rem; border-radius:999px; border:1px solid #ddd; background:#fff; color:#111; }
+    .menu-button:hover { background:#f0f0f0; }
+    main { padding: 0 5vw 8vh; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+  </style>
 </head>
 
-<body onload="pageLoad()" onresize="reSized()" background="#ccc">
+<body>
+  <a class="sr-only" href="#content">Skip to content</a>
 
-    <div id="w100p"> <!--    invisible div helps with measuring screen width     --></div>
-    <div id="measureR"><!--    shows top right borders of viewport in debug mode   --></div>
-    <div id="measureB"><!--    shows top right borders of viewport in debug mode   --></div>
-    <div id="measureWH"><!--    measure avail. screen size   --></div>
+  <header role="banner" id="splash">
+    <h1 id="banner">Maranda McDonald</h1>
+    <p id="underline" class="tagline">Chemical biology researcher & cyclist</p>
+
+    <nav aria-label="Primary">
+      <!-- If you host subpages in the same repo, make these relative links (e.g., /about/) -->
+      <a class="menu-button" href="#filter" id="article" data-selected-tag="Article">PROJECTS</a>
+      <a class="menu-button" href="https://www.marandamcdonald.com/about/" id="about">ABOUT</a>
+      <a class="menu-button" href="https://www.marandamcdonald.com/contact/" id="contact">CONTACT</a>
+    </nav>
+  </header>
+
+  <main id="content" role="main">
+    <!-- Optional intro text; edit or remove -->
+    <section aria-labelledby="intro-heading" style="max-width: 900px; margin: 0 auto;">
+      <h2 id="intro-heading" class="sr-only">Introduction</h2>
+      <p>
+        Welcome! I’m Maranda McDonald. I build chemical biology tools to map PAR
+        interactions and love getting outside on two wheels. Explore my projects,
+        learn more about me, or get in touch.
+      </p>
+    </section>
+
+    <!-- Keep your dynamic areas if your scripts need them -->
+    <div id="filterContainer" hidden>
+      <div id="filter">
+        <button id="scrollLeft" class="scrollButton" aria-label="Scroll left"></button>
+        <div id="tagBarWrapper"><div id="tagBar"></div></div>
+        <button id="scrollRight" class="scrollButton" aria-label="Scroll right"></button>
+      </div>
+    </div>
 
     <div id="menuTop"></div>
-
-    <div id="filterContainer">
-        <div id="filter">
-            <button id="scrollLeft" class="scrollButton"></button>
-            <div id="tagBarWrapper">
-                <div id="tagBar">
-                </div>
-            </div>
-            <button id="scrollRight" class="scrollButton"></button>
-        </div>
-    </div>
-
     <div id="menu"></div>
-    <div id="randomMessage"></div>
+    <div id="randomMessage" aria-live="polite"></div>
     <div id="menuBottom"></div>
-
     <div id="fadeScrollContainer">
-        <div id="videoContainer"></div>
-        <div id="splash">
-
-            <div id="banner">Maranda McDonald</div>
-
-            <div id="underline">transexual biker</div>
-
-            <div id="buttons">
-                <!--<a class="menu-button" href="https://www.marandamcdonald.com/diary/" id="diary">DIARY</a>-->
-                <a class="menu-button" href="#filter" selectedTag='Article' id="article">PROJECTS</a>
-                <a class="menu-button" href="https://www.marandamcdonald.com/about/" id="about">ABOUT</a>
-                <a class="menu-button" href="https://www.marandamcdonald.com/contact/" id="contact">CONTACT</a>
-            </div>
-
-        </div>
+      <div id="videoContainer"></div>
     </div>
+  </main>
 
-
-
-    <div id="debug"></div>
+  <div id="debug" hidden></div>
 </body>
-
 </html>
