@@ -1,119 +1,102 @@
-<!DOCTYPE html lang="en">
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <!-- -------------------------------------------------- -->
-  <title>Maranda McDonald - About</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>About — Maranda McDonald</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
-  <link rel="stylesheet" type="text/css" href="../styleandscripts/articleStyle.css">
-  <script src="../styleandscripts/articleScript.js"></script>
+  <!-- SEO/preview (fill in later if you like) -->
+  <meta name="description" content="About Maranda McDonald — chemical biology PhD candidate researching PAR, enzymology of PARP1/2, and proteomics." />
+  <meta property="og:title" content="About — Maranda McDonald" />
+  <meta property="og:description" content="Chemical biology, PAR research, proteomics, and projects." />
+  <!-- <meta property="og:image" content="https://www.marandamcdonald.com/images/about-preview.jpg" /> -->
 
+  <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
+  <link rel="stylesheet" href="../styleandscripts/articleStyle.css" />
+
+  <script defer src="../styleandscripts/articleScript.js"></script>
+
+  <style>
+    /* Minimal safety styles in case your CSS hasn’t loaded yet */
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; color:#111; background:#fff; }
+    #menu-wrapper { border-bottom:1px solid #eee; }
+    #menu { max-width:1100px; margin:0 auto; padding:0.75rem 1rem; display:flex; gap:1rem; align-items:center; }
+    #menu a { text-decoration:none; color:#111; padding:.35rem .6rem; border-radius:999px; }
+    #menu a:hover { background:#f3f3f3; }
+    #content-wrapper { max-width:1100px; margin:0 auto; padding:2rem 1rem 4rem; }
+    #banner { font-size: clamp(28px, 5vw, 48px); font-weight:600; letter-spacing:.3px; margin-bottom:.25rem; }
+    .subtle { color:#666; margin-bottom:2rem; }
+    .text-block { margin:1.25rem 0 1.5rem; line-height:1.6; }
+    h2 { font-size:1.4rem; margin:2rem 0 .25rem; }
+    ul { padding-left:1.2rem; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+  </style>
 </head>
 
 <body onload="pageLoad()" onresize="pageResize()">
+  <a class="sr-only" href="#main">Skip to content</a>
 
-  <!--. <div id="data">data</diV>.-->
   <div id="menu-wrapper">
-    <div id="menu">
-      <!--<a href="https://www.tajweird.com/diary" id="diary">DIARY</a>
-      <div class="menu-space"></div>-->
-      <a href="https://www.tajweird.com/" id="home">HOME</a>
-      <div class="menu-space"></div>
-      <a href="https://www.tajweird.com/about/" id="about">ABOUT</a>
-      <div class="menu-space"></div>
-      <a href="https://www.tajweird.com/contact/" id="contact">CONTACT</a>
-    </div>
+    <nav id="menu" aria-label="Primary">
+      <a href="/" id="home">HOME</a>
+      <a href="/about/" id="about" aria-current="page">ABOUT</a>
+      <a href="/contact/" id="contact">CONTACT</a>
+    </nav>
   </div>
 
-  <div id="content-wrapper">
-    <div id="banner">
-      TAJ WEIRd
-    </div>
+  <main id="content-wrapper" role="main" id="main">
+    <div id="banner">Maranda McDonald</div>
+    <div class="subtle">Chemical Biology • PAR/ADP-ribosylation • Proteomics</div>
 
-    <div id="article">
-      <!-- ------------------------ meta info -------------------------- -->
-      <h2>About me</h2>
-      <!--<h2>LTT</h2>-->
+    <section class="text-block" aria-labelledby="about-heading">
+      <h2 id="about-heading">About me</h2>
+      <p>
+        I’m a PhD candidate in Chemical Biology at Johns Hopkins (Leung Lab), where I study
+        poly(ADP-ribose) (PAR) and the enzymology of PARP1/2. My work focuses on developing
+        chemical tools and mass-spectrometry workflows to identify PAR-binding sites and
+        understand how PAR scaffolds nucleic-acid–associated processes.
+      </p>
+      <p>
+        I’m passionate about reproducible analysis (R/Python), structural biology visualization,
+        and turning complex datasets into clear, testable hypotheses.
+      </p>
+    </section>
 
-      <div class="poster-image">
-        <img src="../images/OpenworksTallbikeStripped.jpg" />
-      </div>
-      
-      <div class="text-block">
-        <h3>Award Winning* MultiMedia Artist</h3>
-        <div id="meta-info">
-          Hey! I make a lotta random stuff and love trying all sorts of new methods and materials. 
-          I've done some laser cutting, 3d printing, leatherworking, metalworking, woodworking, paper crafting, pen plotting, spray painting, sewing, dumpster diving and more!
-        </div>
-      </div>
-      <div class="image">
-        <div class="image-description">*Winning one of 6 awards given among 11 holes for a small pop up putt putt course to benifit a little park in baltimore. Very prestigious</div>
-        <img src="../images/AwardShot2.jpg" title="" alt="" />
-      </div>
-      
-      <div class="text-block">
-        <h3>Director - Baltimore Node</h3>
-        <div id="meta-info">
-          I've been a memeber at the Baltimore Node hackerspace for 3 years. I'm a "director" but it doesn't mean much and should probably run for president (at the node) next time around.  It's an awesome spot to get projects done and meet creatives and come up with new stuff! Come by 7pm-late on Thursdays at 2106 Lovegrove, Baltimore MD
-        </div>
-      </div>
+    <section class="text-block" aria-labelledby="research-heading">
+      <h2 id="research-heading">Research interests</h2>
+      <ul>
+        <li>PAR readers and binding-site mapping (cleavable photocrosslinkers, proteomics)</li>
+        <li>Enzymology of PARP1/2 and NAD<sup>+</sup>–driven signaling</li>
+        <li>Nucleic acids, RNA-binding proteins, and biomolecular condensates</li>
+        <li>Data-driven method development (FragPipe, DIA-NN, custom R pipelines)</li>
+      </ul>
+    </section>
 
-      <div class="image">
-        <div class="image-description"> Setting up my guillotine to cut the node's 15 yr anniversery cake </div>
-        <img src="../images/guillotine.jpg" title="" alt="Big blade imminently chops cake" />
-      </div>
+    <section class="text-block" aria-labelledby="projects-heading">
+      <h2 id="projects-heading">Selected projects</h2>
+      <ul>
+        <li><strong>PARmap:</strong> proteomics probe + analysis framework to localize PAR-binding sites</li>
+        <li>Domain-level enrichment + PTM overlap analyses for PAR-associated proteins</li>
+        <li>Structure/sequence visualization of PAR interfaces (PyMOL, AlphaFold)</li>
+      </ul>
+    </section>
 
-      <div class="text-block">
-        <h3>Member - Rat Watch Baltimore</h3>
-        <div id="meta-info">
-          I've been in love with freakbikes for a few years now, and have met a lot of different bike clubs in other cities who do cool things together. Rat watch is our little club still in its infancy, but hope to find a spot to stash a build up of silly bikes and location to put on some cool events soon. To be a member of Rat Watch you just gotta build a freaky bike, we've got some spare frames around and can weld stuff up at the node plus fix mechanical issues nearby at Velocipede so its easy and cheap to make happen! 
-        </div>
-      </div>
+    <section class="text-block" aria-labelledby="outside-heading">
+      <h2 id="outside-heading">Outside the lab</h2>
+      <p>
+        I love long bike rides, hiking, and exploring the outdoors. When I’m not debugging a script,
+        I’m probably wrenching on a bike or planning the next route.
+      </p>
+    </section>
 
-      <div class="image">
-        <div class="image-description">Rat watch squad pushes me to victory! </div>
-        <img src="../images/RatWatchPush.jpg" title="" alt="" />
-      </div>    
+    <!-- If/when you want a photo, add it back with a new filename and alt text:
+    <figure class="image">
+      <img src="../images/maranda-portrait.jpg" alt="Portrait of Maranda McDonald" />
+      <figcaption class="image-description">…</figcaption>
+    </figure>
+    -->
+  </main>
 
-      <div class="text-block">
-        <h3>Renowned Socialite</h3>
-        <div id="meta-info">
-          All around Baltimore my name has found its ways, whether in regards to stories of shotgunning bean cans, sneaky watermelons making an apperance at a social bike ride stop or my extrodinarly tasty creme brulee, i'm a kinda a big deal to secure for your social gathering. Please reach out if your formal gathering in the Baltimore area could use a game of musical beans. 
-        </div>
-      </div>
-      <div class="image">
-        <div class="image-description">Showgirlin the jousting </div>
-        <img src="../images/FreakForAll.webp" title="" alt="" />
-      </div> 
-      <div class="text-block">
-        <h3>Hardy Adventurer</h3>
-        <div id="meta-info">
-          Done a decent amount of bike adventures so far- Tall bike tour from NYC->Marquett, MI, lame bike tour from MN->DC, attended a tech summer camp by biking there from Seattle and putzed around the Olympic Penninsula afterward. Love to make my own gear for adventuring and pack minimally. 
-        </div>
-      </div>
-      <div class="image">
-        <div class="image-description">Beans of victory for hiking up my first Murno</div>
-        <img src="../images/beanz.jpg" title="" alt="" />
-      </div> 
-
- 
-
-      <!-- ---------------------- resources ---------------------------- -->
-
-      <!-- -------------------------------------------------- -->
-  </div>
-  <div>
-    <a href="https://www.tajweird.com/random/" id="random-button">TAKE ME TO A RANDOM PROJECT!<div id="random-bar">
-      </div></a>
-
-
-
-  </div>
-  <div id="eof"> </div>
+  <div id="eof"></div>
 </body>
-
-
 </html>
