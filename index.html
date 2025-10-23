@@ -4,78 +4,115 @@
   <meta charset="utf-8" />
   <title>Maranda McDonald</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Maranda McDonald — chemical biology researcher and avid cyclist. Projects, about, and contact." />
+  <meta name="description" content="Maranda McDonald — chemical biology researcher and cyclist. Projects, about, and contact." />
 
-  <!-- Open Graph / Twitter (nice link previews) -->
+  <!-- Open Graph -->
   <meta property="og:title" content="Maranda McDonald" />
   <meta property="og:description" content="Chemical biology, PAR research, and projects." />
-  <!-- If you add a real image later, update this and make sure it's HTTPS and absolute -->
   <!-- <meta property="og:image" content="https://www.marandamcdonald.com/images/preview.jpg" /> -->
-  <meta name="twitter:card" content="summary" />
 
-  <!-- Canonical -->
   <link rel="canonical" href="https://www.marandamcdonald.com/" />
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
 
-  <!-- Favicon (safe to keep if you have it; remove this line if not) -->
-  <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
 
-  <!-- CSS -->
+
+<link rel="icon" href="/images/favicon.svg?v=2" type="image/svg+xml">
+
+
+  <!-- Your existing CSS/JS -->
   <link rel="stylesheet" href="styleandscripts/splashStyle_21.css" />
-
-  <!-- JS (defer so it doesn’t block page render) -->
   <script defer src="styleandscripts/content-objects.js"></script>
   <script defer src="styleandscripts/splashScript_21.js"></script>
   <script>var verbose = 0;</script>
 
+  <!-- Minimal fallback styles (safe even if your CSS hasn’t loaded yet) -->
   <style>
-    /* Minimal fallback styles if your CSS hasn’t loaded yet */
-    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:#f7f7f7; color:#111; }
-    header { padding: 10vh 5vw 4vh; text-align:center; }
-    h1 { margin:0 0 .25em; font-size: clamp(32px, 6vw, 56px); letter-spacing: .5px; }
-    .tagline { color:#555; font-size: clamp(16px, 2.5vw, 20px); }
+    :root { --pad: 5vw; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; background:#f7f7f7; color:#111; }
+    header { padding: 10vh var(--pad) 4vh; text-align:center; }
+    h1 { margin:0 0 .35em; font-size: clamp(32px,6vw,56px); letter-spacing:.3px; }
+    .tagline { color:#555; font-size: clamp(16px,2.5vw,20px); }
     nav { display:flex; justify-content:center; gap:1rem; margin: 2rem 0 0; flex-wrap:wrap; }
-    .menu-button { text-decoration:none; padding:.6rem 1rem; border-radius:999px; border:1px solid #ddd; background:#fff; color:#111; }
+    .menu-button { text-decoration:none; padding:.65rem 1rem; border-radius:999px; border:1px solid #ddd; background:#fff; color:#111; }
     .menu-button:hover { background:#f0f0f0; }
-    main { padding: 0 5vw 8vh; }
+    main { padding: 0 var(--pad) 8vh; }
     .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+
+    /* Gallery */
+    #projects { padding: 3rem 0; }
+    #projects[hidden] { display:none !important; }
+    #projects h2 { margin:0 0 1rem; font-size:1.25rem; color:#333; }
+    .gallery-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; }
+    .thumb { position:relative; cursor:pointer; overflow:hidden; border-radius:10px; background:#eee; border:1px solid #e6e6e6; }
+    .thumb img { width:100%; height:160px; object-fit:cover; display:block; transition:transform .25s; }
+    .thumb:hover img { transform:scale(1.03); }
+    .thumb .cap { position:absolute; left:0; right:0; bottom:0; background:linear-gradient(transparent, rgba(0,0,0,.55)); color:#fff; font-size:.85rem; padding:.45rem .6rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+    /* Lightbox */
+    .lightbox { position:fixed; inset:0; background:rgba(0,0,0,.85); display:grid; place-items:center; z-index:9999; }
+    .lightbox[hidden] { display:none !important; }
+    .lightbox-inner { display:flex; flex-direction:column; align-items:center; gap:.5rem; max-width:92vw; }
+    .lightbox img { max-width:92vw; max-height:80vh; border-radius:12px; background:#111; }
+    .lightbox-caption { color:#fff; text-align:center; max-width:92vw; }
+    .lb-btn { position:fixed; background:transparent; border:0; color:#fff; font-size:32px; cursor:pointer; line-height:1; padding:.25rem .5rem; }
+    .lightbox-close { top:16px; right:18px; }
+    .lightbox-prev { top:50%; left:16px; transform:translateY(-50%); }
+    .lightbox-next { top:50%; right:16px; transform:translateY(-50%); }
+    @media (hover:hover) {
+      .lb-btn:hover { color:#ddd; }
+    }
+
+    /* Optional intro */
+    .intro { max-width:900px; margin: 0 auto 2rem; line-height:1.6; color:#222; }
   </style>
 </head>
 
 <body>
   <a class="sr-only" href="#content">Skip to content</a>
 
-  <header role="banner" id="splash">
+  <!-- HERO / HEADER -->
+  <header id="splash" role="banner">
     <h1 id="banner">Maranda McDonald</h1>
     <p id="underline" class="tagline">Chemical biology researcher & cyclist</p>
 
     <nav aria-label="Primary">
-      <!-- If you host subpages in the same repo, make these relative links (e.g., /about/) -->
-      <a class="menu-button" href="#filter" id="article" data-selected-tag="Article">PROJECTS</a>
-      <a class="menu-button" href="https://www.marandamcdonald.com/about/" id="about">ABOUT</a>
-      <a class="menu-button" href="https://www.marandamcdonald.com/contact/" id="contact">CONTACT</a>
+      <!-- Updated Projects button to open the gallery -->
+      <a class="menu-button" href="#projects" id="article" data-open-gallery>PROJECTS</a>
+      <a class="menu-button" href="/about/" id="about">ABOUT</a>
+      <a class="menu-button" href="/contact/" id="contact">CONTACT</a>
     </nav>
   </header>
 
   <main id="content" role="main">
-    <!-- Optional intro text; edit or remove -->
-    <section aria-labelledby="intro-heading" style="max-width: 900px; margin: 0 auto;">
+    <!-- Optional short intro -->
+    <section class="intro" aria-labelledby="intro-heading">
       <h2 id="intro-heading" class="sr-only">Introduction</h2>
       <p>
-        Welcome! I’m Maranda McDonald. I build chemical biology tools to map PAR
-        interactions and love getting outside on two wheels. Explore my projects,
+        Welcome! I’m Maranda McDonald, a PhD candidate in Chemical Biology at Johns Hopkins (Leung Lab).
+        I build tools to map PAR interactions and love getting outside on two wheels. Explore my projects,
         learn more about me, or get in touch.
       </p>
     </section>
 
-    <!-- Keep your dynamic areas if your scripts need them -->
-    <div id="filterContainer" hidden>
-      <div id="filter">
-        <button id="scrollLeft" class="scrollButton" aria-label="Scroll left"></button>
-        <div id="tagBarWrapper"><div id="tagBar"></div></div>
-        <button id="scrollRight" class="scrollButton" aria-label="Scroll right"></button>
-      </div>
-    </div>
+    <!-- PROJECTS GALLERY (initially hidden; revealed when clicking Projects) -->
+    <section id="projects" aria-labelledby="projects-heading" hidden>
+      <h2 id="projects-heading">Projects</h2>
+      <div id="project-gallery" class="gallery-grid"></div>
 
+      <!-- Lightbox -->
+      <div id="lightbox" class="lightbox" hidden aria-modal="true" role="dialog" aria-label="Image viewer">
+        <button class="lb-btn lightbox-close" aria-label="Close gallery">&times;</button>
+        <button class="lb-btn lightbox-prev" aria-label="Previous image">&#10094;</button>
+        <div class="lightbox-inner">
+          <img id="lightbox-img" alt="" />
+          <div id="lightbox-caption" class="lightbox-caption"></div>
+        </div>
+        <button class="lb-btn lightbox-next" aria-label="Next image">&#10095;</button>
+      </div>
+    </section>
+
+    <!-- Keep any existing dynamic elements your old scripts expect -->
     <div id="menuTop"></div>
     <div id="menu"></div>
     <div id="randomMessage" aria-live="polite"></div>
@@ -86,5 +123,112 @@
   </main>
 
   <div id="debug" hidden></div>
+
+  <!-- ===== Inline Gallery Script (no dependencies) ========================= -->
+  <script>
+    // Where to put your files:  /images/projects/
+    // 1) Upload your images into /images/projects/
+    // 2) List them below as { file: "name.ext", caption: "Optional caption" }
+    const PROJECTS = [
+      // ---------- ADD IMAGES HERE ----------
+       { file: "tallbike_final.jpeg", caption: "Complete Mar-Machine Build " },
+      // { file: "spray-bike-frame.webp",    caption: "Custom Spray.bike frame" },
+      // { file: "parmap-figure.jpg",        caption: "PARmap proteomics figure" },
+      // { file: "laser-panel.png",          caption: "Laser-cut panel" },
+      // { file: "leatherwork-pouch.png",    caption: "Leatherwork tool pouch" },
+      // ------------------------------------------
+    ];
+    const BASE_PATH = "images/projects/";
+
+    // Elements
+    const projectsBtn = document.querySelector('[data-open-gallery]');
+    const section = document.getElementById('projects');
+    const grid = document.getElementById('project-gallery');
+    const lightbox = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lightbox-img');
+    const lbCap = document.getElementById('lightbox-caption');
+    const lbClose = document.querySelector('.lightbox-close');
+    const lbPrev = document.querySelector('.lightbox-prev');
+    const lbNext = document.querySelector('.lightbox-next');
+
+    let currentIndex = 0;
+
+    function buildGallery() {
+      if (!grid) return;
+      grid.innerHTML = "";
+      PROJECTS.forEach((p, i) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'thumb';
+        wrap.setAttribute('role', 'button');
+        wrap.setAttribute('tabindex', '0');
+        wrap.setAttribute('aria-label', p.caption ? `Open image: ${p.caption}` : 'Open image');
+
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.alt = p.caption || '';
+        img.src = BASE_PATH + p.file;
+
+        const cap = document.createElement('div');
+        cap.className = 'cap';
+        cap.textContent = p.caption || p.file;
+
+        wrap.appendChild(img);
+        wrap.appendChild(cap);
+        wrap.addEventListener('click', () => openLightbox(i));
+        wrap.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(i); }
+        });
+
+        grid.appendChild(wrap);
+      });
+    }
+
+    function openSection() {
+      if (section.hasAttribute('hidden')) section.removeAttribute('hidden');
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function openLightbox(i) {
+      if (!PROJECTS.length) return;
+      currentIndex = i;
+      showCurrent();
+      lightbox.removeAttribute('hidden');
+    }
+
+    function showCurrent() {
+      const p = PROJECTS[currentIndex];
+      if (!p) return;
+      lbImg.src = BASE_PATH + p.file + '?v=' + Date.now(); // cache-bust on updates
+      lbImg.alt = p.caption || '';
+      lbCap.textContent = p.caption || '';
+    }
+
+    function closeLightbox() { lightbox.setAttribute('hidden', ''); }
+    function prev() { currentIndex = (currentIndex - 1 + PROJECTS.length) % PROJECTS.length; showCurrent(); }
+    function next() { currentIndex = (currentIndex + 1) % PROJECTS.length; showCurrent(); }
+
+    // Wire up
+    projectsBtn && projectsBtn.addEventListener('click', (e) => {
+      if (projectsBtn.getAttribute('href') === '#projects') e.preventDefault();
+      if (!PROJECTS.length) {
+        // Helpful message if array is still empty
+        grid.innerHTML = '<p style="grid-column:1/-1;color:#555">Add images to the PROJECTS array in the HTML to populate this gallery.</p>';
+      } else {
+        buildGallery();
+      }
+      openSection();
+    });
+
+    lbClose && lbClose.addEventListener('click', closeLightbox);
+    lbPrev && lbPrev.addEventListener('click', prev);
+    lbNext && lbNext.addEventListener('click', next);
+
+    // Close on ESC / backdrop click
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+    lightbox && lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+
+    // Optional: auto-build thumbnails on page load (unhide section below if you want it always visible)
+    // buildGallery(); section.removeAttribute('hidden');
+  </script>
 </body>
 </html>
