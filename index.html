@@ -62,7 +62,7 @@
     .intro{max-width:900px; margin:0 auto 22px; color:var(--muted); text-align:center; line-height:1.6}
 
     /* Masonry grid */
-    .masonry{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); grid-auto-rows:8px; gap:var(--gap); align-items:start}
+    .masonry{display:grid; grid-template-columns:repeat(auto-fill,minmax(400px,1fr)); grid-auto-rows:8px; gap:var(--gap); align-items:start}
     .tile{position:relative; background:var(--card); border:1px solid var(--outline); border-radius:12px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.25)}
     .tile img{display:block; width:100%; height:auto; object-fit:cover; filter:saturate(1.03); transition:transform .25s}
     .tile:hover img{transform:scale(1.03)}
@@ -108,88 +108,114 @@
     <a href="https://www.instagram.com/ratwatchbalt/">@ratwatchbalt</a>
   </footer>
 
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Image list (files expected under /images/projects/)
-    const BASE = "/images/projects/";
-    const items = [
-      {file:"tallbike_final.jpeg",     title:"Mar-Machine",       sub:"Tallbike",                 tag:"Build"},
+  // Global default (used only if an item doesn't specify its own base)
+  const BASE = "/images/";
 
-    ];
+  const items = [
+    // ⚠️ Make sure the folder name matches reality: tall_bikes/ vs tallbikes/
+    { base: "/images/projects/tall_bikes/", file: "brayden_flying.jpg",  title: "Repair Bike",         sub: "Tallbike", tag: "Build" },
+    { base: "/images/projects/tall_bikes/", file: "group_tall.jpg",      title: "Group",               sub: "Tallbike", tag: "Ride" },
+    { base: "/images/projects/building/maranda/", file: "weld_maranda.jpeg", title: "Welding Mar-Machine", sub: "Tallbike", tag: "Build" },
+  ];
 
-    const grid = document.getElementById("gallery");
-    const rowH = 8, gap = 14;
+  const grid = document.getElementById("gallery");
+  const rowH = 20, gap = 24;
 
-    // Attach WebP srcset only if a representative size exists; always keep a base image
-    function attachResponsiveIfAvailable(img, baseNoExt){
-      const test = new Image();
-      test.onload = () => {
-        img.srcset = [
-          `${BASE}${baseNoExt}-400w.webp 400w`,
-          `${BASE}${baseNoExt}-600w.webp 600w`,
-          `${BASE}${baseNoExt}-800w.webp 800w`,
-          `${BASE}${baseNoExt}-1000w.webp 1000w`
-        ].join(", ");
-        img.sizes = "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw";
-      };
-      test.onerror = () => { /* leave base src only */ };
-      test.src = `${BASE}${baseNoExt}-800w.webp?${Date.now()}`;
-    }
+  // --- URL helpers ------------------------------------------------------------
+  function joinURL(base, file){
+    const b = (base ?? "").replace(/\/+$/,"");
+    const f = (file ?? "").replace(/^\/+/,"");
+    return `${b}/${f}`;
+  }
+  function resolveSrc(it){
+    // 1) explicit src, 2) absolute file, 3) item.base+file, 4) BASE+file
+    if (it.src) return it.src;
+    if (/^(\/|https?:)/.test(it.file)) return it.file;
+    return joinURL(it.base || BASE, it.file);
+  }
+  function dirname(path){ return (path.match(/^(.*)\//) || ["",""])[1]; }
+  function basenameNoExt(path){
+    const name = path.split("/").pop() || "";
+    return name.replace(/\.(jpe?g|png|webp)$/i, "");
+  }
 
-    function makeTile(item){
-      const el = document.createElement("article");
-      el.className = "tile";
+  // Attach WebP srcset if responsive assets exist alongside the image
+  function attachResponsiveIfAvailable(img, folder, baseNoExt){
+    const test = new Image();
+    test.onload = () => {
+      img.srcset = [
+        joinURL(folder, `${baseNoExt}-400w.webp`)  + " 400w",
+        joinURL(folder, `${baseNoExt}-600w.webp`)  + " 600w",
+        joinURL(folder, `${baseNoExt}-800w.webp`)  + " 800w",
+        joinURL(folder, `${baseNoExt}-1000w.webp`) + " 1000w",
+      ].join(", ");
+      img.sizes = "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw";
+    };
+    test.onerror = () => { /* keep base src only */ };
+    // Probe one expected size in the same folder
+    test.src = joinURL(folder, `${baseNoExt}-800w.webp`) + `?t=${Date.now()}`;
+  }
 
-      const img = document.createElement("img");
-      img.loading = "lazy";
-      img.alt = item.title;
+  function makeTile(item){
+    const el = document.createElement("article");
+    el.className = "tile";
 
-      const original = BASE + item.file;
-      const baseNoExt = item.file.replace(/\.(jpe?g|png|webp)$/i,'');
-      img.src = original;
+    const img = document.createElement("img");
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.alt = item.title || "";
 
-      // Fallback to .jpg/.jpeg if original fails
-      img.addEventListener("error", () => {
-        const j = `${BASE}${baseNoExt}.jpg`;
-        const jj = `${BASE}${baseNoExt}.jpeg`;
-        if (!img.dataset.f1){ img.dataset.f1 = 1; img.src = j; return; }
-        if (!img.dataset.f2){ img.dataset.f2 = 1; img.src = jj; return; }
-      });
+    const primary = resolveSrc(item);      // full path incl. folder
+    const folder  = dirname(primary) || "/";        // folder of this item
+    const baseNo  = basenameNoExt(primary);         // filename w/o ext
 
-      // Add responsive WebP set only if present
-      attachResponsiveIfAvailable(img, baseNoExt);
+    img.src = primary;
 
-      const banner = document.createElement("div");
-      banner.className = "banner";
-      banner.innerHTML = `${item.title}<small>${item.sub}</small>`;
+    // Fallback chain: same folder, try .jpg then .jpeg
+    img.addEventListener("error", () => {
+      if (!img.dataset.f1){ img.dataset.f1 = 1; img.src = joinURL(folder, baseNo + ".jpg");  return; }
+      if (!img.dataset.f2){ img.dataset.f2 = 1; img.src = joinURL(folder, baseNo + ".jpeg"); return; }
+    });
 
-      const tag = document.createElement("div");
-      tag.className = "tag";
-      tag.textContent = item.tag;
+    // Optional responsive WebP set if present
+    attachResponsiveIfAvailable(img, folder, baseNo);
 
-      el.append(img, banner, tag);
+    const banner = document.createElement("div");
+    banner.className = "banner";
+    banner.innerHTML = `${item.title || ""}<small>${item.sub || ""}</small>`;
 
-      img.addEventListener("load", () => {
+    const tag = document.createElement("div");
+    tag.className = "tag";
+    tag.textContent = item.tag || "";
+
+    el.append(img, banner, tag);
+
+    img.addEventListener("load", () => {
+      const h = el.getBoundingClientRect().height;
+      el.style.gridRowEnd = `span ${Math.ceil((h + gap) / rowH)}`;
+    });
+
+    return el;
+  }
+
+  // Render
+  items.forEach(it => grid.appendChild(makeTile(it)));
+
+  // Re-span on resize
+  let raf;
+  window.addEventListener("resize", () => {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      document.querySelectorAll(".masonry .tile").forEach(el => {
         const h = el.getBoundingClientRect().height;
         el.style.gridRowEnd = `span ${Math.ceil((h + gap) / rowH)}`;
       });
-
-      return el;
-    }
-
-    items.forEach(it => grid.appendChild(makeTile(it)));
-
-    let raf;
-    window.addEventListener("resize", () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        document.querySelectorAll(".masonry .tile").forEach(el => {
-          const h = el.getBoundingClientRect().height;
-          el.style.gridRowEnd = `span ${Math.ceil((h + gap) / rowH)}`;
-        });
-      });
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
